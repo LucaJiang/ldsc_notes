@@ -35,6 +35,8 @@ jobs:
         with:
           source: ./
           destination: ./_site
+      - name: Run generate.sh
+        run: sh generate.sh
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
 

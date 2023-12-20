@@ -29,6 +29,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install nbformat
+      - name: Run generate.sh
+        run: sh generate.sh
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Build with Jekyll
@@ -36,8 +46,6 @@ jobs:
         with:
           source: ./
           destination: ./_site
-      - name: Run generate.sh
-        run: sh generate.sh
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
 

@@ -22,14 +22,14 @@ sh generate.sh
 
 If success, the presentation will be opened automatically in your browser.
 
-### Usage of reveal.js
+<!-- ### Usage of reveal.js
 
 ```sh
 git clone https://github.com/hakimel/reveal.js.git
 cd reveal.js
 git checkout 3.5.0
 cd ..
-```
+``` -->
 
 ## View online
 

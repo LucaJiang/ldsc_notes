@@ -17,6 +17,14 @@ Jiang Wenxin
 
 ## Introduction
 
+test formula $\label{eq:1}$
+$$\sum_{i=1}^n a_i=0$$
+
+$$\begin{aligned}\tag{eq:1}
+\sum_{i=1}^n a_i&=0\\
+\sum_{i=1}^n a_i&=0\\
+\end{aligned}$$
+
 --------------------
 
 ## Individual-level model

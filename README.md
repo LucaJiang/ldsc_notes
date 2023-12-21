@@ -22,6 +22,15 @@ sh generate.sh
 
 If success, the presentation will be opened automatically in your browser.
 
+### Usage of reveal.js
+
+```sh
+git clone https://github.com/hakimel/reveal.js.git
+cd reveal.js
+git checkout 3.5.0
+cd ..
+```
+
 ## View online
 
 You can view the presentation online at [ldsc_notes](https://lucajiang.github.io/LDSC_NOTES/)
@@ -36,7 +45,8 @@ or
 
 ## Reference
 
-[1.] [nbformat doc](https://nbconvert.readthedocs.io/en/latest/usage.html)
-[1.] [Present your data science projects with Jupyter slides](https://medium.com/learning-machine-learning/present-your-data-science-projects-with-jupyter-slides-75f20735eb0f)
+1. [nbformat doc](https://nbconvert.readthedocs.io/en/latest/usage.html)
+
+1. [Present your data science projects with Jupyter slides](https://medium.com/learning-machine-learning/present-your-data-science-projects-with-jupyter-slides-75f20735eb0f)
 
 <!-- [3.] [Markdown Cheatsheet]( -->

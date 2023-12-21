@@ -35,23 +35,22 @@ $$\begin{equation}\tag{1.1}
 \end{equation}$$
 
 $\phi$: N by 1 vector of phenotypes
+
 $X$: N by M matrix of normalized genotypes
+
 $\beta$: M by 1 vector of per-normalized-genotype effect sizes
+
 $\epsilon$: N by 1 vector of environmental effects
 
 **Expectation and Variance:**
 
-<!-- table center-->
-
-<div align="center">
+<!-- table -->
 
 | | $\mathbb{E}$ | $\text{Var}$ |
 | --- | --- | --- |
 | $\beta$ | 0 | $\frac{h_g^2}{M}I$ |
 | $\epsilon$ | 0 | $\left(1-h_g^2\right)I$ |
 | $\phi$ | 0 | $\frac{h_g^2}{M}XX^\text{T}+\left(1-h_g^2\right)I$ |
-
-</div>
 
 **Assumptions:**
 

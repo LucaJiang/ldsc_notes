@@ -125,7 +125,7 @@ $$\begin{equation}\tag{1.7}\begin{aligned}
 We have
 $$\begin{equation}\tag{1.8}\begin{aligned}
 \mathbb{E}\left[\sum_{k=1}^M \tilde{r}_{jk}^2\right] &\approx \sum_{k=1}^M r_{jk}^2+\frac{\sum_{k=1}^M\left(1-r_{jk}^2\right)}{N}\\
-&\approx \ell_j+\frac{M-\ell_j}{N} \qquad \left[\text{definition of} \ell_j\right]
+&\approx \ell_j+\frac{M-\ell_j}{N} \qquad \left[\text{definition of } \ell_j\right]
 \end{aligned}\end{equation}$$
 
 --------------------

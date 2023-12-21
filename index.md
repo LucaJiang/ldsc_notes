@@ -105,11 +105,13 @@ $$\begin{equation}\tag{1.4}\begin{aligned}
 &=\mathbb{E}\left[\text{Var}\left[\hat{\beta}_j|X\right]\right]+0 \qquad \left[\mathbb{E}\left[\hat{\beta}_j|X\right]=0 \right]\\
 &=\mathbb{E}\left[\text{Var}\left[X_j^\text{T}\phi/N|X\right]\right] \qquad \left[\text{LSE}: \hat{\beta}_j=X_j^\text{T}\phi/N \right]\\
 &=\mathbb{E}\left[X_j\text{Var}\left[\phi|X\right]X_j^\text{T}/N^2\right]\\
-&=\frac{1}{N^2}\mathbb{E}\left[\left(\frac{h_g^2}{M}X_j^\text{T}XX^\text{T}X_j+N\left(1-h_g^2\right)\right)\right] \qquad \left[X_j^\text{T}X_j=N\right]
+&=\mathbb{E}\left[\left(\frac{h_g^2}{M}X_j^\text{T}XX^\text{T}X_j+N\left(1-h_g^2\right)\right)\right]/N^2 \quad \left[X_j^\text{T}X_j=N\right]
 \end{aligned}\end{equation}$$
 
 Let $\tilde{r}_{jk}:=\frac{1}{N}\sum_{i=1}^N X_{ij}X_{ik}$ be the sample correlation between additively-coded genotypes at variants $j$ and $k$. Then, rewrite the term on the left as
 $$\begin{equation}\tag{1.6}\frac{1}{N^2}X_j^\text{T}XX^\text{T}X_j=\sum_{k=1}^M \tilde{r}_{jk}^2\end{equation}$$
+
+--------------------
 
 Obtain the expectation of $\tilde{r}_{jk}^2$ by delta method:
 $$\begin{equation}\tag{1.7}\begin{aligned}
@@ -125,6 +127,8 @@ $$\begin{equation}\tag{1.8}\begin{aligned}
 \mathbb{E}\left[\sum_{k=1}^M \tilde{r}_{jk}^2\right] &\approx \sum_{k=1}^M r_{jk}^2+\frac{\sum_{k=1}^M\left(1-r_{jk}^2\right)}{N}\\
 &\approx \ell_j+\frac{M-\ell_j}{N} \qquad \left[\text{definition of} \ell_j\right]
 \end{aligned}\end{equation}$$
+
+--------------------
 
 Therefore, we can continue the derivation of $\text{Var}\left[\hat{\beta}_j\right]$ as
 $$\begin{equation*}\begin{aligned}

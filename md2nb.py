@@ -21,7 +21,7 @@ with open(args.file_name) as f:
     prenb["cells"] = [nbf.v4.new_markdown_cell(text) for text in texts]
     for cell in prenb["cells"]:
         cell.metadata = slidemeta
-        cell.metadata["livereveal"] = {"scroll": True}
+        # cell.metadata["livereveal"] = {"scroll": True}
 
 with open(f"{name}.ipynb", "w") as f:
     nbf.write(prenb, f)

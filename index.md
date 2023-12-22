@@ -15,9 +15,9 @@ Jiang Wenxin
     - [Proof of Proposition 1](#proof-of-proposition-1)
   - [Algorithm for Estimating chi-squared and Heritability](#algorithm-for-estimating-chi-squared-and-heritability)
   - [Limitations](#limitations)
-  - [Reference](#reference)
   - [Cross-trait LDSC](#cross-trait-ldsc)
     - [Shared Samples](#shared-samples)
+  - [Reference](#reference)
 
 --------------------
 
@@ -175,15 +175,19 @@ $$\begin{equation}\begin{aligned}
 Therefore, we can continue the derivation of $\text{Var}\left[\hat{\beta}_j\right]$ as
 $$\begin{equation*}\begin{aligned}
 \text{Var}\left[\hat{\beta}_j\right]&= \mathbb{E}\left[\frac{h_g^2}{MN^2}X_j^\text{T}XX^\text{T}X_j+\frac{1-h_g^2}{N}\right]\\
-&=\frac{h_g^2}{MN^2}\mathbb{E}\left[X_j^\text{T}XX^\text{T}X_j\right]+\frac{1-h_g^2}{N}\\
+% &=\frac{h_g^2}{MN^2}\mathbb{E}\left[X_j^\text{T}XX^\text{T}X_j\right]+\frac{1-h_g^2}{N}\\
 &=\frac{h_g^2}{MN^2}\mathbb{E}\left[\sum_{k=1}^M \tilde{r}_{jk}^2\right]+\frac{1-h_g^2}{N} \qquad \left[\text{Eq. (1.6)}\right]\\
 &=\frac{h_g^2}{MN^2}\left(\ell_j+\frac{M-\ell_j}{N}\right)+\frac{1-h_g^2}{N} \qquad \left[\text{Eq. (1.8)}\right]\\
 &=\frac{(1-1/N)h_g^2}{M}\ell_j+\frac{1}{N}\\
 &\approx\frac{h_g^2}{M}\ell_j+\frac{1}{N} \qquad \left[1-1/N\rightarrow 1\right]
 \end{aligned}\end{equation*}$$
 
+--------------------
+
 Finally, we can obtain the expectation of $\chi^2_j$ as
 $$\begin{equation}\tag{1.9}\mathbb{E}\left[\chi^2_j\right]=N\text{Var}\left[\hat{\beta}_j\right]\approx\frac{N h_g^2}{M}\ell_j+1\end{equation}$$
+
+Here we have proved Proposition 1.
 
 --------------------
 
@@ -208,20 +212,11 @@ $$\begin{equation}\tag{1.9}\mathbb{E}\left[\chi^2_j\right]=N\text{Var}\left[\hat
 
 <!-- A criticism of LD score regression is that every analysis for each pair of traits uses the same LD scores as the dependent variable in the regression model (and as LD scores have been pre- computed by its proponents, literally the same LD scores are used in the majority of applied analyses). This means that any influential points in the regression will affect not only one LD score regression analysis, but all such analyses. LD scores are also likely to be a ‘weak instru- ment’ in the language of Mendelian randomization, as they will only explain a small propor- tion of variance in the dependent variable. Additionally, due to the scale of the data, it is not possible to provide a visual representation of an LD score regression analysis. Standard regres- sion diagnostics are rarely, if ever, performed. Finally, results from LD score regression are not always consistent with known causal relationships; for example, the method did not find evidence for a genetic correlation between LDL cholesterol and CHD risk that survived a multiple- testing correction (Bulik-Sullivan et al., 2015). The method has utility in mapping the genetic distance between related phenotypes, such as determining how closely related different psychiatric disorders are in terms of their genetic predictors (Cross-Disorder Group of the Psychiatric Genomics Consortium, 2013). However, the reliance of the method on numerous linearity and independence assumptions, incorrect weighting in the linear regression model (correct weights would require computation of the Cholesky decomposition of a matrix with dimension equal to the number of genetic variants in the model – misspecified weights are recommended for use in practice), and lack of validation against known causal relationships mean that results from the method should not be treated too seriously as an assessment of causality. -->
 --------------------
+
 - No constraint is applied to heritability estimates, therefore it is possible to get non-interpretable estimates that are below 0 or above 1.
 - Variance of estimators is calculated using a resampling method, the blockwise jackknife. For moderate GWAS sample size, this approach often leads to very wide confidence intervals for enrichment, thereby reducing statistical power.
 - z-scores for SNPs in LD may be strongly correlated. LD score regression reduces the impact of dependence among data points by using specially designed weights in weighted least squares estimation and only including HapMap SNPs in the model. Still, it remains unclear if such empirical approaches are sufficient to remove bias.
 <!-- Despite its success, LD score regression has lim-itations. First, no constraint is applied to heritability estimates, therefore it is possible to get non-interpretable estimates that are below 0 or above 1. Second, variance of estimators is cal- culated using a resampling method, the blockwise jackknife. For moderate GWAS sample size, this approach often leads to very wide confidence intervals for enrichment, thereby reduc- ing statistical power. Finally, z-scores for SNPs in LD may be strongly correlated. LD score regression reduces the impact of dependence among data points by using specially designed weights in weighted least squares estimation and only including HapMap SNPs in the model. Still, it remains unclear if such empirical approaches are sufficient to remove bias. -->
-
---------------------
-
-## Reference
-
-1. B. K. Bulik-Sullivan et al., LD Score regression distinguishes confounding from polygenicity in genome-wide association studies, Nat Genet, vol. 47, no. 3, Art. no. 3, Mar. 2015, doi: 10.1038/ng.3211.
-
-2. https://github.com/YangLabHKUST/XMAP/blob/main/R/ldsc.R
-
-3. Handbook of statistical genomics[M]. John Wiley & Sons, 2019.
 
 --------------------
 
@@ -291,6 +286,16 @@ where $l_{i j}$ denotes the sum of all pairwise LD between SNPs in the $i$ th an
 --------------------
 
 To date, LD score regression is not able to estimate annotation-stratified genetic covariance. GNOVA also shows higher statistical power than LD score regression in both simulations and real data (Lu et al., 2017a).
+
+--------------------
+
+## Reference
+
+1. B. K. Bulik-Sullivan et al., LD Score regression distinguishes confounding from polygenicity in genome-wide association studies, Nat Genet, vol. 47, no. 3, Art. no. 3, Mar. 2015, doi: 10.1038/ng.3211.
+
+2. https://github.com/YangLabHKUST/XMAP/blob/main/R/ldsc.R
+
+3. Handbook of statistical genomics[M]. John Wiley & Sons, 2019.
 
 --------------------
 

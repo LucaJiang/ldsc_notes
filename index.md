@@ -146,7 +146,7 @@ $$\begin{equation}\begin{aligned}
 % &=\text{Var}\left[\frac{1}{N}\sum_{i=1}^N X_{ij}X_{ik}\right]+\mathbb{E}^2\left[\frac{1}{N}\sum_{i=1}^N X_{ij}X_{ik}\right]\\
 % &=\frac{1}{N^2}\sum_{i=1}^N\text{Var}\left[X_{ij}X_{ik}\right]+\frac{1}{N^2}\left(\sum_{i=1}^N\mathbb{E}\left[X_{ij}X_{ik}\right]\right)^2 \\
 % &=\frac{1}{N^2}\sum_{i=1}^N\text{Var}\left[X_{ij}X_{ik}\right]+r_{jk}^2 \qquad \left[\mathbb{E}\left[X_{ij}X_{ik}\right]=r_{jk}\right]\\
-&\approx r_{jk}^2+(1-r_{jk}^2)/N \qquad \left[\text{delta method}\right] \textcolor{red}{??}
+&\approx r_{jk}^2+(1-r_{jk}^2)/N \qquad \left[\text{delta method}\right] \textbf{??}
 \end{aligned}\tag{1.7}\end{equation}$$
 
 > [Discussions on google group](https://groups.google.com/g/ldsc_users/c/mxbnbodkGj0):

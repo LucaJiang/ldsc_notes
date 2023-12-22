@@ -8,12 +8,12 @@ Jiang Wenxin
 --------------------
 <!-- toc -->
 - [Notes on LDSC](#notes-on-ldsc)
-  - [Motivation and Results](#motivation-and-results)
+  - [Motivation, Aims and Formula](#motivation-aims-and-formula)
   - [Individual-Level Model](#individual-level-model)
   - [From Individual-level to LD Score and Heritability](#from-individual-level-to-ld-score-and-heritability)
   - [Summary-Level Model](#summary-level-model)
     - [Proof of Proposition 1](#proof-of-proposition-1)
-  - [Algorithm for Estimating $\\chi^2$-value and Heritability $h\_g^2$](#algorithm-for-estimating-chi2-value-and-heritability-h_g2)
+  - [Algorithm for Estimating chi-squared and Heritability](#algorithm-for-estimating-chi-squared-and-heritability)
   - [Limitations](#limitations)
   - [Reference](#reference)
 
@@ -30,11 +30,13 @@ Jiang Wenxin
 
 <!-- -------------------- -->
 
-## Motivation and Results
+## Motivation, Aims and Formula
 
 - **Individual-level model:** $\phi=X\beta+\epsilon$. If individual data is available, we can estimate the effect size $\beta$ directly.
-- **Summary-level data:** The z-score of variant $j$ is $z_j=\hat{\beta}_j/\text{SE}_j$, where $\hat{\beta}_j$ is the estimated effect size and $\text{SE}_j$ is the standard error. The $\chi^2$ statistic of variant $j$ is $\chi^2_j=N\hat{\beta}_j^2$.
-- **Aim:** Estimate and quantify the contribution of the polygenic signal and the confounding factors to the $\chi^2$ statistics of a variant in GWAS summary statistics.
+- **Summary-level data:** If only the z-score of variant $j$
+$$z_j=\left(\hat{\beta}_j-\bar{\beta}_j\right)/\text{SE}_j=\hat{\beta}_j$$
+is available, where $\hat{\beta}_j$ is the estimated effect size and $\text{SE}_j$ is the standard error of $\hat{\beta}_j$, then calculate the $\chi^2$ statistic of variant $j$ with $$\chi^2_j=N\hat{\beta}_j^2=Nz_j^2.$$
+- **Aim:** Estimate and quantify the contribution of the polygenic signal and the confounding factors to the $\chi^2$ statistics of a variant in GWAS summary statistics. Then we can estimate the SNP heritability $h_g^2$ by regressing the $\chi^2$ statistics on the LD score of each variant. And we can calculate the genetic correlation between two traits.
 - **Formula**: Examining the relationship between the $\chi^2$ statistics and the LD score of a variant, $$\begin{equation*}\mathbb{E}\left[\chi^2_j|\ell_j\right]=\frac{N h_g^2}{M}\ell_j+Na+1\end{equation*}$$
 where $\ell_j$ is the LD score of variant $j$, $h_g^2$ is the SNP heritability, $N$ is the sample size, $M$ is the number of variants, and $a$ measures the confounding factors.
 
@@ -70,8 +72,8 @@ $\epsilon$: N by 1 vector of environmental effects
 | Variable | Size | Description | $\mathbb{E}$ | $\text{Var}$ |
 | --- | --- | --- | --- | --- |
 | $\phi$ | N*1 | Phenotype vector | $0$  | $\frac{h_g^2}{M}XX^\text{T}+\left(1-h_g^2\right)I$ |
-| $X$ | N*M | Genotype matrix | $0$ | $I$ |
-| $\beta$ | M*1 | Effect size vector | $0$ | $\frac{h_g^2}{M}I$ |
+| $X$ | N*M | Normalized Genotype matrix | $0$ | $I$ |
+| $\beta$ | M*1 | Per-normalized Effect size vector | $0$ | $\frac{h_g^2}{M}I$ |
 | $\epsilon$ | N*1 | Environmental effect vector | $0$ | $\left(1-h_g^2\right)I$ |
 
 **Assumptions:**
@@ -130,7 +132,7 @@ $$\begin{equation}\begin{aligned}
 &=\mathbb{E}\left[\text{Var}\left[\hat{\beta}_j|X\right]\right]+0 \qquad \left[\mathbb{E}\left[\hat{\beta}_j|X\right]=0 \right]\\
 &=\mathbb{E}\left[\text{Var}\left[X_j^\text{T}\phi/N|X\right]\right] \qquad \left[\text{LSE}: \hat{\beta}_j=X_j^\text{T}\phi/N \right]\\
 &=\mathbb{E}\left[X_j\text{Var}\left[\phi|X\right]X_j^\text{T}/N^2\right]\\
-&=\mathbb{E}\left[\left(\frac{h_g^2}{M}X_j^\text{T}XX^\text{T}X_j+N\left(1-h_g^2\right)\right)\right]/N^2 \quad \left[X_j^\text{T}X_j=N\right]
+&=\mathbb{E}\left[\frac{h_g^2}{MN^2}X_j^\text{T}XX^\text{T}X_j+\frac{1-h_g^2}{N}\right] \quad \left[X_j^\text{T}X_j=N\right]
 \end{aligned}\tag{1.4}\end{equation}$$
 
 --------------------
@@ -144,7 +146,7 @@ $$\begin{equation}\begin{aligned}
 % &=\text{Var}\left[\frac{1}{N}\sum_{i=1}^N X_{ij}X_{ik}\right]+\mathbb{E}^2\left[\frac{1}{N}\sum_{i=1}^N X_{ij}X_{ik}\right]\\
 % &=\frac{1}{N^2}\sum_{i=1}^N\text{Var}\left[X_{ij}X_{ik}\right]+\frac{1}{N^2}\left(\sum_{i=1}^N\mathbb{E}\left[X_{ij}X_{ik}\right]\right)^2 \\
 % &=\frac{1}{N^2}\sum_{i=1}^N\text{Var}\left[X_{ij}X_{ik}\right]+r_{jk}^2 \qquad \left[\mathbb{E}\left[X_{ij}X_{ik}\right]=r_{jk}\right]\\
-&\approx r_{jk}^2+(1-r_{jk}^2)/N \qquad \left[\text{delta method}\right] ??
+&\approx r_{jk}^2+(1-r_{jk}^2)/N \qquad \left[\text{delta method}\right] \textcolor{red}{??}
 \end{aligned}\tag{1.7}\end{equation}$$
 
 > [Discussions on google group](https://groups.google.com/g/ldsc_users/c/mxbnbodkGj0):
@@ -167,11 +169,12 @@ $$\begin{equation}\begin{aligned}
 
 Therefore, we can continue the derivation of $\text{Var}\left[\hat{\beta}_j\right]$ as
 $$\begin{equation*}\begin{aligned}
-\text{Var}\left[\hat{\beta}_j\right]&=\frac{1}{N^2}\mathbb{E}\left[\left(\frac{h_g^2}{M}X_j^\text{T}XX^\text{T}X_j+N\left(1-h_g^2\right)\right)\right]\\
-&=\left(\frac{h_g^2}{M}\mathbb{E}\left[\sum_{k=1}^M \tilde{r}_{jk}^2\right]+\left(1-h_g^2\right)/N\right) \qquad \left[\text{Eq. (1.6)}\right]\\
-&=\left(\frac{h_g^2}{M}\left(\ell_j+\frac{M-\ell_j}{N}\right)+\left(1-h_g^2\right)/N\right) \qquad \left[\text{Eq. (1.8)}\right]\\
+\text{Var}\left[\hat{\beta}_j\right]&= \mathbb{E}\left[\frac{h_g^2}{MN^2}X_j^\text{T}XX^\text{T}X_j+\frac{1-h_g^2}{N}\right]\\
+&=\frac{h_g^2}{MN^2}\mathbb{E}\left[X_j^\text{T}XX^\text{T}X_j\right]+\frac{1-h_g^2}{N}\\
+&=\frac{h_g^2}{MN^2}\mathbb{E}\left[\sum_{k=1}^M \tilde{r}_{jk}^2\right]+\frac{1-h_g^2}{N} \qquad \left[\text{Eq. (1.6)}\right]\\
+&=\frac{h_g^2}{MN^2}\left(\ell_j+\frac{M-\ell_j}{N}\right)+\frac{1-h_g^2}{N} \qquad \left[\text{Eq. (1.8)}\right]\\
 &=\frac{(1-1/N)h_g^2}{M}\ell_j+\frac{1}{N}\\
-&\approx\frac{h_g^2}{M}\ell_j+\frac{1}{N} \qquad \left[1-1/N\approx 1\right]
+&\approx\frac{h_g^2}{M}\ell_j+\frac{1}{N} \qquad \left[1-1/N\rightarrow 1\right]
 \end{aligned}\end{equation*}$$
 
 Finally, we can obtain the expectation of $\chi^2_j$ as
@@ -179,12 +182,11 @@ $$\begin{equation}\tag{1.9}\mathbb{E}\left[\chi^2_j\right]=N\text{Var}\left[\hat
 
 --------------------
 
-## Algorithm for Estimating $\chi^2$-value and Heritability $h_g^2$
+## Algorithm for Estimating chi-squared and Heritability
 
-1. Calculate the LD score $\ell_j$ for each variant $j$ from the sumstat of a reference panel.
-2. Estimate the raw heritability $h_g^2$ according to $\ell_j$ and z-score $z_j$ of each variant $j$.
-3. Calculate the expected $\chi^2$-value of each variant $j$.
-4. Estimate the $h_g^2$ by regressing the expected $\chi^2$-value on the LD score $\ell_j$.
+1. Calculate the LD score $\ell_j=\sum_{k=1}^M r_{jk}^2$ for each variant $j$ from the sumstat of a reference panel.
+2. Calculate the expected $\chi^2$-value of each variant $j$ with $\mathbb{E}\left[\chi^2_j\right]=Nz_j^2$.
+3. Estimate the $h_g^2$ by regressing the expected $\chi^2$-value on the LD score $\ell_j$ according to $\mathbb{E}\left[\chi^2_j\right]=\frac{N h_g^2}{M}\ell_j+1$.
 
 --------------------
 
@@ -199,7 +201,12 @@ $$\begin{equation}\tag{1.9}\mathbb{E}\left[\chi^2_j\right]=N\text{Var}\left[\hat
 - The method does not always provide a validation against known causal relationships.
 - The method does not provide a causal relationship between two traits.
 
-<!-- A criticism of LD score regression is that every analysis for each pair of traits uses the same LD scores as the dependent variable in the regression model (and as LD scores have been pre- computed by its proponents, literally the same LD scores are used in the majority of applied analyses). This means that any influential points in the regression will affect not only one LD score regression analysis, but all such analyses. LD scores are also likely to be a ‘weak instru- ment’ in the language of Mendelian randomization, as they will only explain a small propor- tion of variance in the dependent variable. Additionally, due to the scale of the data, it is not possible to provide a visual representation of an LD score regression analysis. Standard regres- sion diagnostics are rarely, if ever, performed. Finally, results from LD score regression are not always consistent with known causal relationships; for example, the method did not find evi- dence for a genetic correlation between LDL cholesterol and CHD risk that survived a multiple- testing correction (Bulik-Sullivan et al., 2015). The method has utility in mapping the genetic distance between related phenotypes, such as determining how closely related different psychi- atric disorders are in terms of their genetic predictors (Cross-Disorder Group of the Psychiatric Genomics Consortium, 2013). However, the reliance of the method on numerous linearity and independence assumptions, incorrect weighting in the linear regression model (correct weights would require computation of the Cholesky decomposition of a matrix with dimension equal to the number of genetic variants in the model – misspecified weights are recommended for use in practice), and lack of validation against known causal relationships mean that results from the method should not be treated too seriously as an assessment of causality. -->
+<!-- A criticism of LD score regression is that every analysis for each pair of traits uses the same LD scores as the dependent variable in the regression model (and as LD scores have been pre- computed by its proponents, literally the same LD scores are used in the majority of applied analyses). This means that any influential points in the regression will affect not only one LD score regression analysis, but all such analyses. LD scores are also likely to be a ‘weak instru- ment’ in the language of Mendelian randomization, as they will only explain a small propor- tion of variance in the dependent variable. Additionally, due to the scale of the data, it is not possible to provide a visual representation of an LD score regression analysis. Standard regres- sion diagnostics are rarely, if ever, performed. Finally, results from LD score regression are not always consistent with known causal relationships; for example, the method did not find evidence for a genetic correlation between LDL cholesterol and CHD risk that survived a multiple- testing correction (Bulik-Sullivan et al., 2015). The method has utility in mapping the genetic distance between related phenotypes, such as determining how closely related different psychiatric disorders are in terms of their genetic predictors (Cross-Disorder Group of the Psychiatric Genomics Consortium, 2013). However, the reliance of the method on numerous linearity and independence assumptions, incorrect weighting in the linear regression model (correct weights would require computation of the Cholesky decomposition of a matrix with dimension equal to the number of genetic variants in the model – misspecified weights are recommended for use in practice), and lack of validation against known causal relationships mean that results from the method should not be treated too seriously as an assessment of causality. -->
+--------------------
+- No constraint is applied to heritability estimates, therefore it is possible to get non-interpretable estimates that are below 0 or above 1.
+- Variance of estimators is calculated using a resampling method, the blockwise jackknife. For moderate GWAS sample size, this approach often leads to very wide confidence intervals for enrichment, thereby reducing statistical power.
+- z-scores for SNPs in LD may be strongly correlated. LD score regression reduces the impact of dependence among data points by using specially designed weights in weighted least squares estimation and only including HapMap SNPs in the model. Still, it remains unclear if such empirical approaches are sufficient to remove bias.
+<!-- Despite its success, LD score regression has lim-itations. First, no constraint is applied to heritability estimates, therefore it is possible to get non-interpretable estimates that are below 0 or above 1. Second, variance of estimators is cal- culated using a resampling method, the blockwise jackknife. For moderate GWAS sample size, this approach often leads to very wide confidence intervals for enrichment, thereby reduc- ing statistical power. Finally, z-scores for SNPs in LD may be strongly correlated. LD score regression reduces the impact of dependence among data points by using specially designed weights in weighted least squares estimation and only including HapMap SNPs in the model. Still, it remains unclear if such empirical approaches are sufficient to remove bias. -->
 
 --------------------
 

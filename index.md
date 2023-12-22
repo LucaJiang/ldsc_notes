@@ -8,10 +8,13 @@ Jiang Wenxin
 --------------------
 <!-- toc -->
 - [Notes on LDSC](#notes-on-ldsc)
+  - [Motivation and Results](#motivation-and-results)
   - [Individual-Level Model](#individual-level-model)
   - [From Individual-level to LD Score and Heritability](#from-individual-level-to-ld-score-and-heritability)
   - [Summary-Level Model](#summary-level-model)
     - [Proof of Proposition 1](#proof-of-proposition-1)
+  - [Algorithm for Estimating $\\chi^2$-value and Heritability $h\_g^2$](#algorithm-for-estimating-chi2-value-and-heritability-h_g2)
+  - [Limitations](#limitations)
   - [Reference](#reference)
 
 --------------------
@@ -26,6 +29,16 @@ Jiang Wenxin
 \end{equation}$$ -->
 
 <!-- -------------------- -->
+
+## Motivation and Results
+
+- **Individual-level model:** $\phi=X\beta+\epsilon$. If individual data is available, we can estimate the effect size $\beta$ directly.
+- **Summary-level data:** The z-score of variant $j$ is $z_j=\hat{\beta}_j/\text{SE}_j$, where $\hat{\beta}_j$ is the estimated effect size and $\text{SE}_j$ is the standard error. The $\chi^2$ statistic of variant $j$ is $\chi^2_j=N\hat{\beta}_j^2$.
+- **Aim:** Estimate and quantify the contribution of the polygenic signal and the confounding factors to the $\chi^2$ statistics of a variant in GWAS summary statistics.
+- **Formula**: Examining the relationship between the $\chi^2$ statistics and the LD score of a variant, $$\begin{equation*}\mathbb{E}\left[\chi^2_j|\ell_j\right]=\frac{N h_g^2}{M}\ell_j+Na+1\end{equation*}$$
+where $\ell_j$ is the LD score of variant $j$, $h_g^2$ is the SNP heritability, $N$ is the sample size, $M$ is the number of variants, and $a$ measures the confounding factors.
+
+--------------------
 
 ## Individual-Level Model
 
@@ -56,10 +69,10 @@ $\epsilon$: N by 1 vector of environmental effects
 
 | Variable | Size | Description | $\mathbb{E}$ | $\text{Var}$ |
 | --- | --- | --- | --- | --- |
-| $\phi$ | $N\times 1$ | Phenotype vector | $0$  | $\frac{h_g^2}{M}XX^\text{T}+\left(1-h_g^2\right)I$ |
-| $X$ | $N\times M$ | Genotype matrix | $0$ | $I$ |
-| $\beta$ | $M\times 1$ | Effect size vector | $0$ | $\frac{h_g^2}{M}I$ |
-| $\epsilon$ | $N\times 1$ | Environmental effect vector | $0$ | $\left(1-h_g^2\right)I$ |
+| $\phi$ | N*1 | Phenotype vector | $0$  | $\frac{h_g^2}{M}XX^\text{T}+\left(1-h_g^2\right)I$ |
+| $X$ | N*M | Genotype matrix | $0$ | $I$ |
+| $\beta$ | M*1 | Effect size vector | $0$ | $\frac{h_g^2}{M}I$ |
+| $\epsilon$ | N*1 | Environmental effect vector | $0$ | $\left(1-h_g^2\right)I$ |
 
 **Assumptions:**
 
@@ -74,7 +87,7 @@ $\epsilon$: N by 1 vector of environmental effects
 Define the correlation between two variants $j$ and $k$ as
 $$\begin{equation*}r_{jk}:=\mathbb{E}\left[X_{ij}X_{ik}\right]\end{equation*}$$
 
-> $r_{jk}=\mathbb{E}\left[\frac{\text{Cov}\left[X_{ij},X_{ik}\right]}{\sqrt{\text{Var}\left[X_{ij}\right]\text{Var}\left[X_{ik}\right]}}\right]=\mathbb{E}\left[X_{ij}X_{ik}\right] - \mathbb{E}\left[X_{ij}\right]\mathbb{E}\left[X_{ik}\right]=\mathbb{E}\left[X_{ij}X_{ik}\right]$
+*Note:* $r_{jk}=\mathbb{E}\left[\frac{\text{Cov}\left[X_{ij},X_{ik}\right]}{\sqrt{\text{Var}\left[X_{ij}\right]\text{Var}\left[X_{ik}\right]}}\right]=\mathbb{E}\left[X_{ij}X_{ik}\right] - \mathbb{E}\left[X_{ij}\right]\mathbb{E}\left[X_{ik}\right]=\mathbb{E}\left[X_{ij}X_{ik}\right]$
 
 **LD Score:**
 Define the LD score of variant $j$ as
@@ -82,9 +95,9 @@ $$\begin{equation}\ell_j:=\sum_{k=1}^M r_{jk}^2\tag{1.2}\end{equation}$$
 
 **Heritability:**
 Since $\text{Var}\left[\phi|X\right]=\frac{h_g^2}{M}XX^\text{T}+\left(1-h_g^2\right)I$, we have
-$$\begin{equation}\tag{1.3}h_g^2=\frac{\text{Var}\left[\phi|X\right]-I}{XX^\text{T}/M-I}\end{equation}$$
+$$\begin{equation*}h_g^2=\frac{\text{Var}\left[\phi|X\right]-I}{XX^\text{T}/M-I}\end{equation*}$$
 
-> $h_g^2$ is the proportion of phenotypic variance explained by the genotypes. It is also called the SNP heritability. It is the ratio of the variance of the phenotype explained by the genotypes to the total variance of the phenotype.
+*Note:* $h_g^2$ is the proportion of phenotypic variance explained by the genotypes. It is also called the SNP heritability. It is the ratio of the variance of the phenotype explained by the genotypes to the total variance of the phenotype.
 
 --------------------
 
@@ -93,11 +106,12 @@ $$\begin{equation}\tag{1.3}h_g^2=\frac{\text{Var}\left[\phi|X\right]-I}{XX^\text
 **$\chi^2$ statistic:**
 Define the $\chi^2$ statistic of variant $j$ as
 $$\begin{equation*}\chi^2_j:=N\hat{\beta}_j^2\end{equation*}$$
-where $\hat{\beta}_j:=X_j^\text{T}\phi/N$ is the estimated effect size of variant $j$.
+
+where $\hat{\beta}_j:=X_j^\text{T}\phi/N$ is the estimated effect size of variant $j$. Here $H_0: \hat{\beta}_j\sim\mathcal{N}\left(0,\text{Var}\left[\hat{\beta}_j\right]\right)$, when $N$ is large enough.
 
 **Proposition 1:**
 The expected $\chi^2$-value of variant $j$ is
-$$\begin{equation}\tag{1.3}\mathbb{E}\left[\chi^2_j\right]=\frac{N h_g^2}{M}\ell_j+1\end{equation}$$
+$$\begin{equation}\mathbb{E}\left[\chi^2_j\right]=\frac{N h_g^2}{M}\ell_j+1\tag{1.3}\end{equation}$$
 
 --------------------
 
@@ -125,24 +139,29 @@ Let $\tilde{r}_{jk}:=\frac{1}{N}\sum_{i=1}^N X_{ij}X_{ik}$ be the sample correla
 $$\begin{equation}\tag{1.6}\frac{1}{N^2}X_j^\text{T}XX^\text{T}X_j=\sum_{k=1}^M \tilde{r}_{jk}^2\end{equation}$$
 
 Obtain the expectation of $\tilde{r}_{jk}^2$ by delta-method:
-$$\begin{equation}\tag{1.7}\begin{aligned}
+$$\begin{equation}\begin{aligned}
 \mathbb{E}\left[\tilde{r}_{jk}^2\right]&=\text{Var}\left[\tilde{r}_{jk}\right]+\mathbb{E}^2\left[\tilde{r}_{jk}\right] \qquad [\text{MoM}]\\
 % &=\text{Var}\left[\frac{1}{N}\sum_{i=1}^N X_{ij}X_{ik}\right]+\mathbb{E}^2\left[\frac{1}{N}\sum_{i=1}^N X_{ij}X_{ik}\right]\\
 % &=\frac{1}{N^2}\sum_{i=1}^N\text{Var}\left[X_{ij}X_{ik}\right]+\frac{1}{N^2}\left(\sum_{i=1}^N\mathbb{E}\left[X_{ij}X_{ik}\right]\right)^2 \\
 % &=\frac{1}{N^2}\sum_{i=1}^N\text{Var}\left[X_{ij}X_{ik}\right]+r_{jk}^2 \qquad \left[\mathbb{E}\left[X_{ij}X_{ik}\right]=r_{jk}\right]\\
 &\approx r_{jk}^2+(1-r_{jk}^2)/N \qquad \left[\text{delta method}\right] ??
-\end{aligned}\end{equation}$$
+\end{aligned}\tag{1.7}\end{equation}$$
 
->[Discussions on google group](https://groups.google.com/g/ldsc_users/c/mxbnbodkGj0): $$\begin{equation*}\begin{aligned}\mu_2^{\prime}&=1-\frac{(n-2)\left(1-\rho^2\right)}{n-1} F\left(1,1, \frac{1}{2}(n+1) ; \rho^2\right)\\&\rightarrow 1-\left(1-\frac{1}{n-1}\right)\left(1-\rho^2\right), n\rightarrow \infty\end{aligned}\end{equation*}$$ Here $\mu_2^{\prime}$ is the 2nd moment of sample correlation, $\rho$ is the population correlation coefficient, $\mathrm{n}$ is the number of observations.
+> [Discussions on google group](https://groups.google.com/g/ldsc_users/c/mxbnbodkGj0):
+>
+> $$\begin{equation*}\begin{aligned}\mu_2^{\prime}&=1-\frac{(n-2)\left(1-\rho^2\right)}{n-1} F\left(1,1, \frac{1}{2}(n+1) ; \rho^2\right)\\&\rightarrow 1-\left(1-\frac{1}{n-1}\right)\left(1-\rho^2\right), n\rightarrow \infty\end{aligned}\end{equation*}$$
+>
+> Here $\mu_2^{\prime}$ is the 2nd moment of sample correlation, $\rho$ is the population correlation coefficient, $\mathrm{n}$ is the number of observations.
+
 <!-- $$
 F\left(\alpha, \beta, \delta ; \rho^2\right)=\frac{\Gamma(\delta)}{\Gamma(\alpha) \Gamma(\beta)} \sum_{j=0}^{\infty} \frac{\Gamma(\alpha+j) \Gamma(\beta+j)}{\Gamma(\delta+j)} \frac{\left(\rho^2\right)^j}{j !}
 $$ -->
 
 We have
-$$\begin{equation}\tag{1.8}\begin{aligned}
+$$\begin{equation}\begin{aligned}
 \mathbb{E}\left[\sum_{k=1}^M \tilde{r}_{jk}^2\right] &\approx \sum_{k=1}^M r_{jk}^2+\frac{\sum_{k=1}^M\left(1-r_{jk}^2\right)}{N}\\
 &\approx \ell_j+\frac{M-\ell_j}{N} \qquad \left[\text{def. of } \ell_j\right]
-\end{aligned}\end{equation}$$
+\end{aligned}\tag{1.8}\end{equation}$$
 
 --------------------
 
@@ -160,8 +179,34 @@ $$\begin{equation}\tag{1.9}\mathbb{E}\left[\chi^2_j\right]=N\text{Var}\left[\hat
 
 --------------------
 
+## Algorithm for Estimating $\chi^2$-value and Heritability $h_g^2$
+
+1. Calculate the LD score $\ell_j$ for each variant $j$ from the sumstat of a reference panel.
+2. Estimate the raw heritability $h_g^2$ according to $\ell_j$ and z-score $z_j$ of each variant $j$.
+3. Calculate the expected $\chi^2$-value of each variant $j$.
+4. Estimate the $h_g^2$ by regressing the expected $\chi^2$-value on the LD score $\ell_j$.
+
+--------------------
+
+## Limitations
+
+- The same LD score is used for all pairs of traits.
+- The LD score is a weak instrument that explains only a small proportion of variance in the dependent variable.
+- The method relies on numerous linearity and independence assumptions.
+- The method does not provide a visual representation of an LD score regression analysis.
+- The method does not perform standard regression diagnostics.
+- The method does not always provide consistent results with known causal relationships.
+- The method does not always provide a validation against known causal relationships.
+- The method does not provide a causal relationship between two traits.
+
+<!-- A criticism of LD score regression is that every analysis for each pair of traits uses the same LD scores as the dependent variable in the regression model (and as LD scores have been pre- computed by its proponents, literally the same LD scores are used in the majority of applied analyses). This means that any influential points in the regression will affect not only one LD score regression analysis, but all such analyses. LD scores are also likely to be a ‘weak instru- ment’ in the language of Mendelian randomization, as they will only explain a small propor- tion of variance in the dependent variable. Additionally, due to the scale of the data, it is not possible to provide a visual representation of an LD score regression analysis. Standard regres- sion diagnostics are rarely, if ever, performed. Finally, results from LD score regression are not always consistent with known causal relationships; for example, the method did not find evi- dence for a genetic correlation between LDL cholesterol and CHD risk that survived a multiple- testing correction (Bulik-Sullivan et al., 2015). The method has utility in mapping the genetic distance between related phenotypes, such as determining how closely related different psychi- atric disorders are in terms of their genetic predictors (Cross-Disorder Group of the Psychiatric Genomics Consortium, 2013). However, the reliance of the method on numerous linearity and independence assumptions, incorrect weighting in the linear regression model (correct weights would require computation of the Cholesky decomposition of a matrix with dimension equal to the number of genetic variants in the model – misspecified weights are recommended for use in practice), and lack of validation against known causal relationships mean that results from the method should not be treated too seriously as an assessment of causality. -->
+
+--------------------
+
 ## Reference
 
 1. B. K. Bulik-Sullivan et al., LD Score regression distinguishes confounding from polygenicity in genome-wide association studies, Nat Genet, vol. 47, no. 3, Art. no. 3, Mar. 2015, doi: 10.1038/ng.3211.
 
-<!-- 2. ... -->
+2. https://github.com/YangLabHKUST/XMAP/blob/main/R/ldsc.R
+
+3. Handbook of statistical genomics[M]. John Wiley & Sons, 2019.

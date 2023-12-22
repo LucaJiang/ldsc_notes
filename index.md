@@ -101,8 +101,10 @@ Define the LD score of variant $j$ as
 $$\begin{equation}\ell_j:=\sum_{k=1}^M r_{jk}^2\tag{1.2}\end{equation}$$
 
 **Heritability:**
-Since $\text{Var}\left[\phi|X\right]=\frac{h_g^2}{M}XX^\text{T}+\left(1-h_g^2\right)I$, we have
-$$\begin{equation*}h_g^2=\frac{\text{Var}\left[\phi|X\right]-I}{XX^\text{T}/M-I}\end{equation*}$$
+$$\begin{equation*}
+% h_g^2=\frac{\text{Var}\left[\phi|X\right]-I}{XX^\text{T}/M-I}
+\text{Var}\left[\phi|X\right]=\frac{h_g^2}{M}XX^\text{T}+\left(1-h_g^2\right)I
+\end{equation*}$$
 
 *Note:* $h_g^2$ is the proportion of phenotypic variance explained by the genotypes. It is also called the SNP heritability. It is the ratio of the variance of the phenotype explained by the genotypes to the total variance of the phenotype.
 

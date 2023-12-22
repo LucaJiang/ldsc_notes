@@ -16,6 +16,8 @@ Jiang Wenxin
   - [Algorithm for Estimating chi-squared and Heritability](#algorithm-for-estimating-chi-squared-and-heritability)
   - [Limitations](#limitations)
   - [Reference](#reference)
+  - [Cross-trait LDSC](#cross-trait-ldsc)
+    - [Shared Samples](#shared-samples)
 
 --------------------
 
@@ -217,3 +219,73 @@ $$\begin{equation}\tag{1.9}\mathbb{E}\left[\chi^2_j\right]=N\text{Var}\left[\hat
 2. https://github.com/YangLabHKUST/XMAP/blob/main/R/ldsc.R
 
 3. Handbook of statistical genomics[M]. John Wiley & Sons, 2019.
+
+--------------------
+
+## Cross-trait LDSC
+
+Cross-trait LD score regression is based on the following model:
+$$
+\begin{array}{ll}
+Y_1=X \beta+\varepsilon, & \beta \sim N\left(0, \frac{h_1^2}{M} I\right), \quad \varepsilon \sim N\left(0,\left(1-h_1^2\right) I\right), \\
+Y_2=Z \gamma+\delta, & \gamma \sim N\left(0, \frac{h_2^2}{M} I\right), \quad \delta \sim N\left(0,\left(1-h_2^2\right) I\right) .
+\end{array}
+$$
+
+SNPs' effects on two different traits are assumed to be correlated:
+$$
+E\left(\beta \gamma^T\right)=\frac{\rho_g}{M} I,
+$$
+where $\rho_g$ is the genetic covariance parameter that quantifies the genetic sharing between traits $Y_1$ and $Y_2$.
+
+--------------------
+
+### Shared Samples
+
+Importantly, LD score regression allows two GWASs to share a fraction of samples. Without loss of generality, assume the first $n_s$ samples (i.e. rows) in $X$ and $Z$ are identical and the non-genetic effects for shared samples are correlated:
+$$
+E\left(\varepsilon_i \delta_i\right)=\rho_e, \quad i=1, \ldots, n_s
+$$
+
+Then, the cross-trait LD score regression formula is
+$$
+E\left(\left(z_1\right)_j\left(z_2\right)_j\right)=\frac{\sqrt{n_1 n_2} \rho_g}{M} l_j+\frac{\left(\rho_g+\rho_e\right) n_s}{\sqrt{n_1 n_2}}
+$$
+
+Similar to single-trait analysis, regression coefficients can be used to estimate genetic covariance, or a close-related but more interpretable metric - genetic correlation:
+$$
+\text { corr }=\frac{\rho_g}{\sqrt{h_1^2 h_2^2}}
+$$
+
+--------------------
+
+A recent method, GNOVA (Lu et al., 2017a), has extended cross-tissue LD score regression to model annotation-stratified genetic covariance. When $K$ functional annotations are present in the model,
+$$
+\begin{aligned}
+Y_1 & =\sum_{i=1}^K X_i \beta_i+\varepsilon, \\
+Y_2 & =\sum_{i=1}^K Z_i \gamma_i+\chi, \\
+E\left(\beta_i \gamma_i^T\right) & =\frac{\rho_i}{m_i} I .
+\end{aligned}
+$$
+
+Parameters $\rho_i(i=1, \ldots, K)$ quantify the genetic covariance components for each functional annotation. GNOVA used an estimator based on the method of moments to estimate genetic covariance:
+$$
+\left(\begin{array}{c}
+\hat{\rho}_1 \\
+\vdots \\
+\hat{\rho}_K
+\end{array}\right)=\frac{1}{\sqrt{n_1 n_2}}\left(\begin{array}{ccc}
+\frac{1}{m_1 m_1} l_{11} & \cdots & \frac{1}{m_K m_1} l_{K 1} \\
+\vdots & \ddots & \vdots \\
+\frac{1}{m_1 m_K} l_{1 K} & \cdots & \frac{1}{m_K m_K} l_{K K}
+\end{array}\right)^{-1}\left(\begin{array}{c}
+\frac{1}{m_1}\left(z_1\right)_1^T\left(z_2\right)_1 \\
+\vdots \\
+\frac{1}{m_K}\left(z_1\right)_K^T\left(z_2\right)_K
+\end{array}\right),
+$$
+where $l_{i j}$ denotes the sum of all pairwise LD between SNPs in the $i$ th and $j$ th functional annotations; $\left(z_j\right)_i$ denotes the vector of $z$-scores from the $j$ th study for SNPs in the $i$ th functional annotation. To date, LD score regression is not able to estimate annotation-stratified genetic covariance. GNOVA also shows higher statistical power than LD score regression in both simulations and real data (Lu et al., 2017a).
+
+--------------------
+
+END

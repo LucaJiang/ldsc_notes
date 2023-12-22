@@ -38,6 +38,9 @@ Jiang Wenxin
 - **Summary-level data:** If only the z-score of variant $j$
 $$z_j=\left(\hat{\beta}_j-\bar{\beta}_j\right)/\text{SE}_j=\hat{\beta}_j$$
 is available, where $\hat{\beta}_j$ is the estimated effect size and $\text{SE}_j$ is the standard error of $\hat{\beta}_j$, then calculate the $\chi^2$ statistic of variant $j$ with $$\chi^2_j=N\hat{\beta}_j^2=Nz_j^2.$$
+
+--------------------
+
 - **Aim:** Estimate and quantify the contribution of the polygenic signal and the confounding factors to the $\chi^2$ statistics of a variant in GWAS summary statistics. Then we can estimate the SNP heritability $h_g^2$ by regressing the $\chi^2$ statistics on the LD score of each variant. And we can calculate the genetic correlation between two traits.
 - **Formula**: Examining the relationship between the $\chi^2$ statistics and the LD score of a variant, $$\begin{equation*}\mathbb{E}\left[\chi^2_j|\ell_j\right]=\frac{N h_g^2}{M}\ell_j+Na+1\end{equation*}$$
 where $\ell_j$ is the LD score of variant $j$, $h_g^2$ is the SNP heritability, $N$ is the sample size, $M$ is the number of variants, and $a$ measures the confounding factors.
@@ -155,19 +158,19 @@ $$\begin{equation}\begin{aligned}
 >
 > $$\begin{equation*}\begin{aligned}\mu_2^{\prime}&=1-\frac{(n-2)\left(1-\rho^2\right)}{n-1} F\left(1,1, \frac{1}{2}(n+1) ; \rho^2\right)\\&\rightarrow 1-\left(1-\frac{1}{n-1}\right)\left(1-\rho^2\right), n\rightarrow \infty\end{aligned}\end{equation*}$$
 >
-> Here $\mu_2^{\prime}$ is the 2nd moment of sample correlation, $\rho$ is the population correlation coefficient, $\mathrm{n}$ is the number of observations.
+> Here $\mu_2^{\prime}$ is the 2nd moment of sample correlation, $\rho$ is the population correlation coefficient, $\mathrm{n}$ is # observations.
 
 <!-- $$
 F\left(\alpha, \beta, \delta ; \rho^2\right)=\frac{\Gamma(\delta)}{\Gamma(\alpha) \Gamma(\beta)} \sum_{j=0}^{\infty} \frac{\Gamma(\alpha+j) \Gamma(\beta+j)}{\Gamma(\delta+j)} \frac{\left(\rho^2\right)^j}{j !}
 $$ -->
+
+--------------------
 
 We have
 $$\begin{equation}\begin{aligned}
 \mathbb{E}\left[\sum_{k=1}^M \tilde{r}_{jk}^2\right] &\approx \sum_{k=1}^M r_{jk}^2+\frac{\sum_{k=1}^M\left(1-r_{jk}^2\right)}{N}\\
 &\approx \ell_j+\frac{M-\ell_j}{N} \qquad \left[\text{def. of } \ell_j\right]
 \end{aligned}\tag{1.8}\end{equation}$$
-
---------------------
 
 Therefore, we can continue the derivation of $\text{Var}\left[\hat{\beta}_j\right]$ as
 $$\begin{equation*}\begin{aligned}
@@ -262,8 +265,7 @@ $$
 A recent method, GNOVA (Lu et al., 2017a), has extended cross-tissue LD score regression to model annotation-stratified genetic covariance. When $K$ functional annotations are present in the model,
 $$
 \begin{aligned}
-Y_1 & =\sum_{i=1}^K X_i \beta_i+\varepsilon, \\
-Y_2 & =\sum_{i=1}^K Z_i \gamma_i+\chi, \\
+Y_1  =\sum_{i=1}^K X_i \beta_i+\varepsilon,\quad Y_2  =\sum_{i=1}^K Z_i \gamma_i+\chi, \quad
 E\left(\beta_i \gamma_i^T\right) & =\frac{\rho_i}{m_i} I .
 \end{aligned}
 $$
@@ -284,7 +286,11 @@ $$
 \frac{1}{m_K}\left(z_1\right)_K^T\left(z_2\right)_K
 \end{array}\right),
 $$
-where $l_{i j}$ denotes the sum of all pairwise LD between SNPs in the $i$ th and $j$ th functional annotations; $\left(z_j\right)_i$ denotes the vector of $z$-scores from the $j$ th study for SNPs in the $i$ th functional annotation. To date, LD score regression is not able to estimate annotation-stratified genetic covariance. GNOVA also shows higher statistical power than LD score regression in both simulations and real data (Lu et al., 2017a).
+where $l_{i j}$ denotes the sum of all pairwise LD between SNPs in the $i$ th and $j$ th functional annotations; $\left(z_j\right)_i$ denotes the vector of $z$-scores from the $j$ th study for SNPs in the $i$ th functional annotation.
+
+--------------------
+
+To date, LD score regression is not able to estimate annotation-stratified genetic covariance. GNOVA also shows higher statistical power than LD score regression in both simulations and real data (Lu et al., 2017a).
 
 --------------------
 

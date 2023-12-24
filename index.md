@@ -14,6 +14,7 @@ Jiang Wenxin
   - [Summary-Level Model](#summary-level-model)
     - [Proof of Proposition 1](#proof-of-proposition-1)
   - [Algorithm for Estimating chi-squared and Heritability](#algorithm-for-estimating-chi-squared-and-heritability)
+  - [Criticisms](#criticisms)
   - [Limitations](#limitations)
   - [Cross-trait LDSC](#cross-trait-ldsc)
     - [Shared Samples](#shared-samples)
@@ -116,7 +117,7 @@ $$\begin{equation*}
 Define the $\chi^2$ statistic of variant $j$ as
 $$\begin{equation*}\chi^2_j:=N\hat{\beta}_j^2\end{equation*}$$
 
-where $\hat{\beta}_j:=X_j^\text{T}\phi/N$ is the estimated effect size of variant $j$. Here $H_0: \hat{\beta}_j\sim\mathcal{N}\left(0,\text{Var}\left[\hat{\beta}_j\right]\right)$, when $N$ is large enough.
+where $\hat{\beta}_j:=X_j^\text{T}\phi/N$ is the estimated effect size of variant $j$.
 
 **Proposition 1:**
 The expected $\chi^2$-value of variant $j$ is
@@ -153,7 +154,8 @@ $$\begin{equation}\begin{aligned}
 % &=\text{Var}\left[\frac{1}{N}\sum_{i=1}^N X_{ij}X_{ik}\right]+\mathbb{E}^2\left[\frac{1}{N}\sum_{i=1}^N X_{ij}X_{ik}\right]\\
 % &=\frac{1}{N^2}\sum_{i=1}^N\text{Var}\left[X_{ij}X_{ik}\right]+\frac{1}{N^2}\left(\sum_{i=1}^N\mathbb{E}\left[X_{ij}X_{ik}\right]\right)^2 \\
 % &=\frac{1}{N^2}\sum_{i=1}^N\text{Var}\left[X_{ij}X_{ik}\right]+r_{jk}^2 \qquad \left[\mathbb{E}\left[X_{ij}X_{ik}\right]=r_{jk}\right]\\
-&\approx r_{jk}^2+(1-r_{jk}^2)/N \qquad \left[\text{delta method}\right] \textbf{??}
+&\approx r_{jk}^2+(1-r_{jk}^2)/N \qquad \left[\text{delta method}\right]
+% \textbf{??}
 \end{aligned}\tag{1.7}\end{equation}$$
 
 > [Discussions on google group](https://groups.google.com/g/ldsc_users/c/mxbnbodkGj0):
@@ -201,24 +203,36 @@ Here we have proved Proposition 1.
 
 --------------------
 
-## Limitations
+## Criticisms
 
-- The same LD score is used for all pairs of traits.
+<!-- - The same LD score is used for all pairs of traits.
 - The LD score is a weak instrument that explains only a small proportion of variance in the dependent variable.
 - The method relies on numerous linearity and independence assumptions.
 - The method does not provide a visual representation of an LD score regression analysis.
 - The method does not perform standard regression diagnostics.
 - The method does not always provide consistent results with known causal relationships.
 - The method does not always provide a validation against known causal relationships.
-- The method does not provide a causal relationship between two traits.
+- The method does not provide a causal relationship between two traits. -->
 
-<!-- A criticism of LD score regression is that every analysis for each pair of traits uses the same LD scores as the dependent variable in the regression model (and as LD scores have been pre- computed by its proponents, literally the same LD scores are used in the majority of applied analyses). This means that any influential points in the regression will affect not only one LD score regression analysis, but all such analyses. LD scores are also likely to be a ‘weak instru- ment’ in the language of Mendelian randomization, as they will only explain a small propor- tion of variance in the dependent variable. Additionally, due to the scale of the data, it is not possible to provide a visual representation of an LD score regression analysis. Standard regres- sion diagnostics are rarely, if ever, performed. Finally, results from LD score regression are not always consistent with known causal relationships; for example, the method did not find evidence for a genetic correlation between LDL cholesterol and CHD risk that survived a multiple- testing correction (Bulik-Sullivan et al., 2015). The method has utility in mapping the genetic distance between related phenotypes, such as determining how closely related different psychiatric disorders are in terms of their genetic predictors (Cross-Disorder Group of the Psychiatric Genomics Consortium, 2013). However, the reliance of the method on numerous linearity and independence assumptions, incorrect weighting in the linear regression model (correct weights would require computation of the Cholesky decomposition of a matrix with dimension equal to the number of genetic variants in the model – misspecified weights are recommended for use in practice), and lack of validation against known causal relationships mean that results from the method should not be treated too seriously as an assessment of causality. -->
+A criticism of LD score regression is that every analysis for each pair of traits uses the same LD scores as the dependent variable in the regression model (and as LD scores have been precomputed by its proponents, literally the same LD scores are used in the majority of applied analyses). This means that any influential points in the regression will affect not only one LD score regression analysis, but all such analyses.
+
+LD scores are also likely to be a ‘weak instrument’ in the language of Mendelian randomization, as they will only explain a small proportion of variance in the dependent variable. Additionally, due to the scale of the data, it is not possible to provide a visual representation of an LD score regression analysis. Standard regres- sion diagnostics are rarely, if ever, performed. Finally, results from LD score regression are not always consistent with known causal relationships; for example, the method did not find evidence for a genetic correlation between LDL cholesterol and CHD risk that survived a multipletesting correction (Bulik-Sullivan et al., 2015).
+
 --------------------
 
-- No constraint is applied to heritability estimates, therefore it is possible to get non-interpretable estimates that are below 0 or above 1.
+The method has utility in mapping the genetic distance between related phenotypes, such as determining how closely related different psychiatric disorders are in terms of their genetic predictors (Cross-Disorder Group of the Psychiatric Genomics Consortium, 2013). However, the reliance of the method on numerous linearity and independence assumptions, incorrect weighting in the linear regression model (correct weights would require computation of the Cholesky decomposition of a matrix with dimension equal to the number of genetic variants in the model–misspecified weights are recommended for use in practice), and lack of validation against known causal relationships mean that results from the method should not be treated too seriously as an assessment of causality.
+
+--------------------
+
+## Limitations
+<!-- - No constraint is applied to heritability estimates, therefore it is possible to get non-interpretable estimates that are below 0 or above 1.
 - Variance of estimators is calculated using a resampling method, the blockwise jackknife. For moderate GWAS sample size, this approach often leads to very wide confidence intervals for enrichment, thereby reducing statistical power.
-- z-scores for SNPs in LD may be strongly correlated. LD score regression reduces the impact of dependence among data points by using specially designed weights in weighted least squares estimation and only including HapMap SNPs in the model. Still, it remains unclear if such empirical approaches are sufficient to remove bias.
-<!-- Despite its success, LD score regression has lim-itations. First, no constraint is applied to heritability estimates, therefore it is possible to get non-interpretable estimates that are below 0 or above 1. Second, variance of estimators is cal- culated using a resampling method, the blockwise jackknife. For moderate GWAS sample size, this approach often leads to very wide confidence intervals for enrichment, thereby reduc- ing statistical power. Finally, z-scores for SNPs in LD may be strongly correlated. LD score regression reduces the impact of dependence among data points by using specially designed weights in weighted least squares estimation and only including HapMap SNPs in the model. Still, it remains unclear if such empirical approaches are sufficient to remove bias. -->
+- z-scores for SNPs in LD may be strongly correlated. LD score regression reduces the impact of dependence among data points by using specially designed weights in weighted least squares estimation and only including HapMap SNPs in the model. Still, it remains unclear if such empirical approaches are sufficient to remove bias. -->
+First, no constraint is applied to heritability estimates, therefore it is possible to get non-interpretable estimates that are below 0 or above 1.
+
+Second, variance of estimators is cal- culated using a resampling method, the blockwise jackknife. For moderate GWAS sample size, this approach often leads to very wide confidence intervals for enrichment, thereby reducing statistical power.
+
+Finally, z-scores for SNPs in LD may be strongly correlated. LD score regression reduces the impact of dependence among data points by using specially designed weights in weighted least squares estimation and only including HapMap SNPs in the model. Still, it remains unclear if such empirical approaches are sufficient to remove bias.
 
 --------------------
 

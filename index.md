@@ -6,7 +6,7 @@ Jiang Wenxin
 2023.12.22
 
 --------------------
-<!-- toc -->
+
 - [Notes on LDSC](#notes-on-ldsc)
   - [Motivation, Aims and Formula](#motivation-aims-and-formula)
   - [Individual-Level Model](#individual-level-model)
@@ -21,17 +21,6 @@ Jiang Wenxin
   - [Reference](#reference)
 
 --------------------
-
-<!-- ## Introduction -->
-
-<!-- $$\begin{equation}\tag{eq:1}
-\begin{aligned}
-\sum_{i=1}^n b&=0\\
-\sum_{i=1}^n c&=0\\
-\end{aligned}
-\end{equation}$$ -->
-
-<!-- -------------------- -->
 
 ## Motivation, Aims and Formula
 
@@ -225,9 +214,11 @@ The method has utility in mapping the genetic distance between related phenotype
 --------------------
 
 ## Limitations
+
 <!-- - No constraint is applied to heritability estimates, therefore it is possible to get non-interpretable estimates that are below 0 or above 1.
 - Variance of estimators is calculated using a resampling method, the blockwise jackknife. For moderate GWAS sample size, this approach often leads to very wide confidence intervals for enrichment, thereby reducing statistical power.
 - z-scores for SNPs in LD may be strongly correlated. LD score regression reduces the impact of dependence among data points by using specially designed weights in weighted least squares estimation and only including HapMap SNPs in the model. Still, it remains unclear if such empirical approaches are sufficient to remove bias. -->
+
 First, no constraint is applied to heritability estimates, therefore it is possible to get non-interpretable estimates that are below 0 or above 1.
 
 Second, variance of estimators is cal- culated using a resampling method, the blockwise jackknife. For moderate GWAS sample size, this approach often leads to very wide confidence intervals for enrichment, thereby reducing statistical power.

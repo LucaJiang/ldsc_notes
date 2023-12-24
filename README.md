@@ -1,5 +1,7 @@
 # Instruction on how to use markdown to generate slides
 
+**IMPORTANT:** This repo has set up the github action to automatically generate the slides html file which is pushed to the gh-pages branch.
+
 ## Write content in [index.md](index.md)
 
 Use this notation to split slides:

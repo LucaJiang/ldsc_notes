@@ -1,7 +1,7 @@
 # LDSC_Notes
 
 <!-- badged -->
-<!-- github action -->
+[![GitHub Pages](https://github.com/LucaJiang/ldsc_notes/actions/workflows/jekyll-gh-pages.yml/badge.svg?branch=gh-pages)](https://github.com/LucaJiang/ldsc_notes/actions/workflows/jekyll-gh-pages.yml)
 
 Notes for LD Score Regression.
 
@@ -14,7 +14,7 @@ Notes for LD Score Regression.
 - 'master' branch: the source code of my implementation of LDSC.
   - 'ldscore' folder: the source code of LDSC.
   - 'ldsc.py' file: the entry point of LDSC.
-  - 'data' folder: the data used by LDSC, i.e. l^2 and reference panel.
+  - 'data' folder: the data used by LDSC, i.e. $\ell^2$ and reference panel.
   - 'results' folder: the output log of LDSC.
 - 'gh-pages' branch: the code of the presentation page.
 

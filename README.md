@@ -23,7 +23,35 @@ Notes for LD Score Regression.
 
 ## How to Run
 
+- Calculate LD scores and estimate heritability:
+
 ```bash
+python3 ldsc.py \
+-M all \
+-s ./data/full.sumstats \
+-r ./data/eur_w_ld_chr/ \
+-m CM -w 1e-4 \
+-o test
+```
+
+- Calculate LD scores only:
+
+```bash
+python3 ldsc.py \
+-M ldsc \
+-s ./data/full.sumstats \
+-r ./data/eur_w_ld_chr/ \
+-m CM -w 1e-4 \
+-o test
+```
+
+- Estimate heritability only:
+
+```bash
+python3 ldsc.py \
+-M h2 \
+-s ./results/test.out \
+-o test
 ```
 
 ## Implementation Details
@@ -34,7 +62,7 @@ Notes for LD Score Regression.
   - [x] Calculate LD Score in each chromosome with sliding window
 - [ ] Iterative ReWeighted Least Squares(IRWLS):
   $$\mathbf{Y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\epsilon}$$
-$$\text{argmin}\_{\boldsymbol{\beta}} \sum_{i=1}^n ||y_i - \mathbf{x}_i\boldsymbol{\beta}||^p$$
+$$\text{argmin}\_{\boldsymbol{\beta}} \sum_{i=1}^n ||y_i - \mathbf{x}_i\boldsymbol{\beta}||_p$$
   where $\mathbf{X}=[\mathbf{1},\mathbf{\ell}]$ is a $n\times 2$ matrix.
   - [x] Initial with pesudo-inverse:
     $$\hat{\boldsymbol{\beta}}_0 = \text{pinv}(\mathbf{X})\mathbf{Y}$$
@@ -42,12 +70,12 @@ $$\text{argmin}\_{\boldsymbol{\beta}} \sum_{i=1}^n ||y_i - \mathbf{x}_i\boldsymb
       1. Calculate the residuals:
         $$\mathbf{r}_k = \mathbf{Y} - \mathbf{X}\hat{\boldsymbol{\beta}}_k$$
       2. Calculate the weight matrix:
-        $$\mathbf{w}_k = || \mathbf{r}_k ||^{p-2}$$
+        $$\mathbf{w}_k = | \mathbf{r}_k |^{p-2}$$
         $$\mathbf{W}\_k = \text{diag}(\mathbf{w}\_k/\sum \mathbf{w}\_k)$$
-      4. Update the regression coefficient:
+      3. Update the regression coefficient:
         $$\hat{\boldsymbol{\beta}}_{k+1} = (\mathbf{X}^T\mathbf{W}_k\mathbf{X})^{-1}\mathbf{X}^T\mathbf{W}_k\mathbf{Y}$$
-      5. Check convergence:
-        $$||\mathbf{r}\_k - \mathbf{r}\_{k+1}|| < \epsilon$$
+      4. Check convergence:
+        $$||\mathbf{r}\_k - \mathbf{r}\_{k+1}||_2 < \epsilon$$
 
   - [ ] jackknife estimate of the variance:
       <!-- $$\hat{\sigma}^2 = \frac{1}{n}\sum_{i=1}^n \frac{r_i^2}{w_i}$$ -->

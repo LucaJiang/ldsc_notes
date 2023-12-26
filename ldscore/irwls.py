@@ -9,6 +9,14 @@ import jackknife as jk
 class IRLS:
     """
     Python Class for Iterative Weighted Least Squares
+    Usage:
+    ```
+    from irwls import IRLS
+    irwls = IRLS(X, y)
+    irwls.regression()
+    reg_intercept = irwls.get_intercept()
+    reg_coefficients = irwls.get_coefficients()
+    ```
     Algorithm:
       1. Calculate the residuals:
         $$\mathbf{r}_k = \mathbf{Y} - \mathbf{X}\hat{\boldsymbol{\beta}}_k$$
@@ -90,4 +98,15 @@ class IRLS:
         self.weights = weights
         self.n_iter = i + 1
         self.convergence = convergence
-        return self.beta
+
+    def get_intercept(self):
+        """
+        Return the intercept
+        """
+        return self.beta[0]
+
+    def get_coefficients(self):
+        """
+        Return the coefficients
+        """
+        return self.beta[1]

@@ -20,3 +20,24 @@
 2023-12-25 21:06:52,646 - INFO - Merged 23 LD score files
 2023-12-25 21:06:54,087 - INFO - Calculated LD score for 22 chromosomes
 2023-12-25 21:06:58,555 - INFO - Wrote LD score to /Users/lucajiang/learn/CityU/ldsc_notes/test.out
+2023-12-26 20:07:19,715 - INFO - Calculating LD score
+2023-12-26 20:07:20,227 - INFO - Read 1217311 SNPs from /Users/lucajiang/learn/CityU/ldsc_notes/data/full.sumstats
+2023-12-26 20:07:20,265 - INFO - Remain 860636 SNPs with z-score
+2023-12-26 20:07:21,199 - INFO - Merged 860636 SNPs with *.snplist file
+2023-12-26 20:07:28,572 - INFO - Merged 23 LD score files
+2023-12-26 20:07:31,126 - INFO - Calculated LD score for 22 chromosomes
+2023-12-26 20:07:35,630 - INFO - Wrote LD score to /Users/lucajiang/learn/CityU/ldsc_notes/test
+2023-12-26 20:07:35,672 - INFO - Finished in 15.95725703239441 seconds
+2023-12-26 20:26:37 - INFO - /nMission: h2
+2023-12-26 20:26:37 - INFO - Mission completed./n
+2023-12-26 20:27:12 - INFO - 
+Mission: h2
+2023-12-26 20:28:08 - INFO - 
+Mission: h2
+2023-12-26 20:28:09 - INFO - Calculating heritability
+2023-12-26 20:29:03 - INFO - 
+Mission: h2
+2023-12-26 20:29:04 - INFO - Calculating heritability
+2023-12-26 20:29:53 - INFO - 
+Mission: h2
+2023-12-26 20:29:54 - INFO - Calculating heritability

@@ -1,24 +1,31 @@
 import argparse, logging, os, time, sys
 from ldscore.calLDScore import sumstats2ldsc
-import ldscore.irwls
+import ldscore.irwls as irwls
+import pandas as pd
+import numpy as np
 
 
 # Input: sumstats_file, reference_panel, N, method, window_size, out_file
 parser = argparse.ArgumentParser(
-    description="Calculate heritability from summary statistics"
+    description="Calculate LD score or heritability from summary statistics"
+)
+parser.add_argument(
+    "--mission",
+    "-M",
+    type=str,
+    default="all",
+    help="Mission to run, 'all', 'ldsc', or 'h2'",
 )
 parser.add_argument(
     "--sumstats",
     "-s",
     type=str,
-    required=True,
     help="Path to summary statistics file",
 )
 parser.add_argument(
     "--ref_panel",
     "-r",
     type=str,
-    required=True,
     help="Path to reference panel",
 )
 parser.add_argument(
@@ -51,9 +58,10 @@ parser.add_argument(
 )
 
 if __name__ == "__main__":
+    start_time = time.time()
+
     # Get args and Create Logger ------------------------------------------------
     args = parser.parse_args()
-    start_time = time.time()
     # Create a logger
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
@@ -61,28 +69,56 @@ if __name__ == "__main__":
     # Create a file handler
     file_handler = logging.FileHandler(os.path.join("results", args.out + ".log"))
     file_handler.setFormatter(
-        logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+        logging.Formatter(
+            "%(asctime)s - %(levelname)s - %(message)s", "%Y-%m-%d %H:%M:%S"
+        )
     )
 
     # Create a stream handler
     stream_handler = logging.StreamHandler(sys.stdout)
     stream_handler.setFormatter(
-        logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+        logging.Formatter(
+            "%(asctime)s - %(levelname)s - %(message)s", "%Y-%m-%d %H:%M:%S"
+        )
     )
 
     # Add the handlers to the logger
     logger.addHandler(file_handler)
     logger.addHandler(stream_handler)
 
-    logging.info("Calculating LD score")
-    variables = sumstats2ldsc(
-        args.sumstats,
-        args.ref_panel,
-        args.N,
-        args.method,
-        args.window_size,
-        args.out,
-    )
-    logging.info("Finished in {} seconds".format(time.time() - start_time))
-    x = variables["LDSCORE"]
-    y = variables["Z"] ** 2
+    logging.info("\nMission: {}".format(args.mission))
+
+    # Run Model ---------------------------
+    if args.mission == "ldsc" or args.mission == "all":
+        logging.info("Calculating LD score")
+        variables = sumstats2ldsc(
+            args.sumstats,
+            args.ref_panel,
+            args.N,
+            args.method,
+            args.window_size,
+            args.out,
+        )
+        logging.info(
+            "LD score: Finished in {} seconds".format(time.time() - start_time)
+        )
+    if args.mission == "h2":
+        # only calculate heritability, need to read parameters from file
+        variables = pd.read_csv(args.sumstats, sep="\t")
+
+    if args.mission == "all" or args.mission == "h2":
+        logging.info("Calculating heritability")
+        x = variables["LDSCORE"].values.reshape(-1, 1)
+        x = np.concatenate(
+            [np.ones_like(x), x], axis=1
+        )  # add a column of onesintercept
+        y = variables["Z"] ** 2
+        irwls = irwls.IRLS(x, y)
+        irwls.regression()
+        reg_intercept = irwls.get_intercept()
+        reg_coefficients = irwls.get_coefficients()
+        logging.info("Intercept: %.4f" % reg_intercept)
+        logging.info("h^2: %.4f" % reg_coefficients)
+        logging.info("H^2: Finished in {} seconds".format(time.time() - start_time))
+
+    logging.info("Mission completed.\n")

@@ -33,9 +33,8 @@ Notes for LD Score Regression.
   - [x] Mapping from SNP in sumsstats to SNP in reference panel
   - [x] Calculate LD Score in each chromosome with sliding window
 - [ ] Iterative ReWeighted Least Squares(IRWLS):
-  $$\begin{aligned}
-  \mathbf{Y} &= \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\epsilon}\\
-  \argmin_{\boldsymbol{\beta}} &\sum_{i=1}^n \|y_i - \mathbf{x}_i\boldsymbol{\beta}\|^p \end{aligned}$$
+  $$\mathbf{Y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\epsilon}$$
+$$\text{argmin}\_{\boldsymbol{\beta}} \sum_{i=1}^n ||y_i - \mathbf{x}_i\boldsymbol{\beta}||^p$$
   where $\mathbf{X}=[\mathbf{1},\mathbf{\ell}]$ is a $n\times 2$ matrix.
   - [x] Initial with pesudo-inverse:
     $$\hat{\boldsymbol{\beta}}_0 = \text{pinv}(\mathbf{X})\mathbf{Y}$$
@@ -43,14 +42,13 @@ Notes for LD Score Regression.
       1. Calculate the residuals:
         $$\mathbf{r}_k = \mathbf{Y} - \mathbf{X}\hat{\boldsymbol{\beta}}_k$$
       2. Calculate the weight matrix:
-        $$\begin{aligned}
-        \mathbf{w}_k &= \| \mathbf{r}_k \|^{p-2}\\
-        \mathbf{W}_k &= \text{diag}(\mathbf{w}_k/\sum \mathbf{w}_k)
-        \end{aligned}$$
-      3. Update the regression coefficient:
+        $$\mathbf{w}_k = || \mathbf{r}_k ||^{p-2}$$
+        $$\mathbf{W}\_k = \text{diag}(\mathbf{w}\_k/\sum \mathbf{w}\_k)$$
+      4. Update the regression coefficient:
         $$\hat{\boldsymbol{\beta}}_{k+1} = (\mathbf{X}^T\mathbf{W}_k\mathbf{X})^{-1}\mathbf{X}^T\mathbf{W}_k\mathbf{Y}$$
-      4. Check convergence:
-        $$\|\mathbf{r}_k - \mathbf{r}_{k+1}\| < \epsilon$$
+      5. Check convergence:
+        $$||\mathbf{r}\_k - \mathbf{r}\_{k+1}|| < \epsilon$$
+
   - [ ] jackknife estimate of the variance:
       <!-- $$\hat{\sigma}^2 = \frac{1}{n}\sum_{i=1}^n \frac{r_i^2}{w_i}$$ -->
 

@@ -23,6 +23,14 @@ Notes for LD Score Regression.
 
 ## How to Run
 
+- Install dependencies:
+
+```bash
+pip3 install -r requirements.txt
+```
+
+Note: only need install `jackknife` to estimate the variance of heritability.
+
 - Calculate LD scores and estimate heritability:
 
 ```bash
@@ -58,7 +66,7 @@ python3 ldsc.py \
 ## Implementation Details
 
 - [x] LD Score Calculation with MPI
-  - [ ] Delete MAF < 0.01 SNPs
+  - [x] Delete MAF <= 0.01 SNPs, ignore the order of 'A1' and 'A2'
   - [x] Mapping from SNP in sumsstats to SNP in reference panel
   - [x] Calculate LD Score in each chromosome with sliding window
 - [ ] Iterative ReWeighted Least Squares(IRWLS):
@@ -88,4 +96,5 @@ The presentation on LDSC is [here](https://lucajiang.github.io/ldsc_notes/#/), w
 ## Reference
 
 1. Bulik-Sullivan, Brendan K., et al. "LD score regression distinguishes confounding from polygenicity in genome-wide association studies." Nature genetics 47.3 (2015): 291-295. doi: [10.1038/ng.3211](https://doi.org/10.1038/ng.3211)
-2. Burrus C S. Iterative reweighted least squares[J]. OpenStax CNX. Available online: [web.archive](https://web.archive.org/web/20221017041048/https://cnx.org/exports/92b90377-2b34-49e4-b26f-7fe572db78a1@12.pdf/iterative-reweighted-least-squares-12.pdf), 2012, 12.
+2. Cai M, Wang Z, Xiao J, et al. XMAP: Cross-population fine-mapping by leveraging genetic diversity and accounting for confounding bias[J]. bioRxiv, 2023: 2023.03. 30.534832.
+3. Burrus C S. Iterative reweighted least squares[J]. OpenStax CNX. Available online: [web.archive](https://web.archive.org/web/20221017041048/https://cnx.org/exports/92b90377-2b34-49e4-b26f-7fe572db78a1@12.pdf/iterative-reweighted-least-squares-12.pdf), 2012, 12.

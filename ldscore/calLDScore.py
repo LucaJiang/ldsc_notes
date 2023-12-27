@@ -15,12 +15,12 @@ def read_sumstats(file_path):
     df = pd.read_csv(file_path, sep="\t", header=0, usecols=["SNP", "Z", "A1", "A2"])
     logging.info("Read {} SNPs from {}".format(df.shape[0], file_path))
     ## delete rows without z-score
-    df = df.dropna(subset=["Z"])
+    df.dropna(subset=["Z"], inplace=True)
     # check if there are duplicated SNPs
     duplicated = df.duplicated(subset=["SNP"])
     if np.any(duplicated):
         df = df[~duplicated]
-        logging.info("Deleted {} duplicated SNPs".format(np.sum(duplicated)))
+        logging.info("Removed {} duplicated SNPs".format(np.sum(duplicated)))
     logging.info("Remain {} unique SNPs with z-score".format(df.shape[0]))
 
     return df
@@ -58,7 +58,8 @@ def _merge_with_l2(ld_file, snplist):
     """
     with gzip.open(ld_file, "rt") as f:
         ldscore = pd.read_csv(f, sep="\t")
-        return pd.merge(snplist, ldscore, on="SNP")
+    ldscore.set_index("SNP", inplace=True)
+    return ldscore.join(snplist, on="SNP", how="inner")
 
 
 def get_l2(snplist, ld_dir):
@@ -73,14 +74,25 @@ def get_l2(snplist, ld_dir):
     ld_files = glob.glob(os.path.join(ld_dir, "*.l2.ldscore.gz"))
     ## Delete files contain 'old'
     ld_files = [ld_file for ld_file in ld_files if "old" not in ld_file]
+    logging.info("Merged {} LD score files".format(len(ld_files)))
+
+    ## set SNP as index to accelerate
+    snplist.set_index("SNP", inplace=True)
 
     with mp.Pool() as pool:
         merged_list = pool.starmap(
             _merge_with_l2, [(ld_file, snplist) for ld_file in ld_files]
         )
-    logging.info("Merged {} LD score files".format(len(ld_files)))
+    # concatenate all chromosomes
+    merged_list = pd.concat(merged_list)
+    len_before = merged_list.shape[0]
+    # delete MAF <= 0.01
+    merged_list = merged_list[merged_list["MAF"] > 0.01]
+    logging.info(
+        "Removed {} SNPs with MAF <= 0.01".format(len_before - merged_list.shape[0])
+    )
 
-    return pd.concat(merged_list)
+    return merged_list
 
 
 # Calculate LD score of each SNP in a chromosome
@@ -185,26 +197,6 @@ if __name__ == "__main__":
     reference_panel = "/Users/lucajiang/learn/CityU/ldsc_notes/data/eur_w_ld_chr/"
     method = "CM"
     window_size = 1e-4
-
-    # # Create a logger
-    # logger = logging.getLogger()
-    # logger.setLevel(logging.INFO)
-
-    # # Create a file handler
-    # file_handler = logging.FileHandler("results/test.log")
-    # file_handler.setFormatter(
-    #     logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
-    # )
-
-    # # Create a stream handler
-    # stream_handler = logging.StreamHandler(sys.stdout)
-    # stream_handler.setFormatter(
-    #     logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
-    # )
-
-    # # Add the handlers to the logger
-    # logger.addHandler(file_handler)
-    # logger.addHandler(stream_handler)
 
     ldscore = sumstats2ldsc(
         sumstats_file,

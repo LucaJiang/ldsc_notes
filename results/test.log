@@ -30,3 +30,39 @@
 2023-12-27 12:20:55 - INFO - Mission completed.
 
 
+2023-12-27 15:36:37 - INFO - Mission: ldsc
+2023-12-27 15:36:37 - INFO - Command: ldsc.py -M ldsc -s ./data/full.sumstats -r ./data/eur_w_ld_chr/ -m CM -w 1e-2 -o ./results/test
+2023-12-27 15:36:37 - INFO - Calculating LD score
+2023-12-27 15:36:38 - INFO - Read 1217311 SNPs from /Users/lucajiang/learn/CityU/ldsc_notes/data/full.sumstats
+2023-12-27 15:36:38 - INFO - Remain 860636 unique SNPs with z-score
+2023-12-27 15:36:39 - INFO - Remain 860239 SNPs after merged with *.snplist file
+2023-12-27 15:36:39 - INFO - Merged 22 LD score files
+2023-12-27 15:36:44 - INFO - Removed 0 SNPs with MAF <= 0.01
+2023-12-27 15:36:45 - INFO - Calculated LD score for 22 chromosomes
+2023-12-27 15:36:47 - INFO - Wrote LD score to /Users/lucajiang/learn/CityU/ldsc_notes/results/test
+2023-12-27 15:36:47 - INFO - LD score: Finished in 10.04 seconds
+2023-12-27 15:51:50 - INFO - Mission: ldsc
+2023-12-27 15:51:50 - INFO - Command: ldsc.py -M ldsc -s ./data/full.sumstats -r ./data/eur_w_ld_chr/ -m CM -w 1e-2 -o ./results/test
+2023-12-27 15:51:50 - INFO - Calculating LD score
+2023-12-27 15:51:50 - INFO - Read 1217311 SNPs from /Users/lucajiang/learn/CityU/ldsc_notes/data/full.sumstats
+2023-12-27 15:51:50 - INFO - Remain 860636 unique SNPs with z-score
+2023-12-27 15:51:51 - INFO - Remain 860239 SNPs after merged with *.snplist file
+2023-12-27 15:51:51 - INFO - Merged 22 LD score files
+2023-12-27 15:51:55 - INFO - Removed 0 SNPs with MAF <= 0.01
+2023-12-27 15:51:56 - INFO - Calculated LD score for 22 chromosomes
+2023-12-27 15:51:59 - INFO - Wrote LD score to /Users/lucajiang/learn/CityU/ldsc_notes/results/test
+2023-12-27 15:51:59 - INFO - LD score: Finished in 8.99 seconds
+2023-12-27 15:59:45 - INFO - Mission: ldsc
+2023-12-27 15:59:45 - INFO - Command: ldsc.py -M ldsc -s ./data/full.sumstats -r ./data/eur_w_ld_chr/ -m CM -w 1e-2 -o ./results/test
+2023-12-27 15:59:45 - INFO - Calculating LD score
+2023-12-27 15:59:45 - INFO - Read 1217311 SNPs from /Users/lucajiang/learn/CityU/ldsc_notes/data/full.sumstats
+2023-12-27 15:59:45 - INFO - Remain 860636 unique SNPs with z-score
+2023-12-27 15:59:46 - INFO - Remain 860239 SNPs after merged with *.snplist file
+2023-12-27 15:59:46 - INFO - Merged 22 LD score files
+2023-12-27 15:59:50 - INFO - Removed 0 SNPs with MAF <= 0.01
+2023-12-27 15:59:51 - INFO - Calculated LD score for 22 chromosomes
+2023-12-27 15:59:53 - INFO - Wrote LD score to /Users/lucajiang/learn/CityU/ldsc_notes/results/test
+2023-12-27 15:59:53 - INFO - LD score: Finished in 8.58 seconds
+2023-12-27 15:59:53 - INFO - Mission completed.
+
+

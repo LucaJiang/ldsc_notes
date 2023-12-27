@@ -1,7 +1,8 @@
 # Python Class for Iterative Weighted Least Squares
 
 import numpy as np
-import jackknife as jk
+
+# import jackknife as jk
 
 # TODO: add jackknife
 
@@ -110,3 +111,17 @@ class IRLS:
         Return the coefficients
         """
         return self.beta[1]
+
+
+#! TEST
+if __name__ == "__main__":
+    import pandas as pd
+
+    coef = pd.read_csv(".results/test_coef.txt", sep="\t")
+    x = coef["LDSCORE"].values.reshape(-1, 1)
+    y = coef["Z^2"].values.reshape(-1, 1)
+    x = np.concatenate([np.ones_like(x), x], axis=1)
+    irwls = IRLS(x, y)
+    irwls.regression()
+    print(irwls.get_intercept())
+    print(irwls.get_coefficients())

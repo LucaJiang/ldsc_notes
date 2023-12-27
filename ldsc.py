@@ -90,39 +90,52 @@ if __name__ == "__main__":
     logging.info("Command: {}".format(" ".join(sys.argv)))
 
     # Run Model ---------------------------
-    if args.mission == "ldsc" or args.mission == "all":
-        logging.info("Calculating LD score")
-        variables = sumstats2ldsc(
-            args.sumstats,
-            args.ref_panel,
-            args.method,
-            args.window_size,
-            args.out,
-        )
-        logging.info("LD score: Finished in %.2f seconds" % (time.time() - start_time))
-    if args.mission == "h2":
-        # only calculate heritability, need to read parameters from file
-        variables = pd.read_csv(args.sumstats, sep="\t")
+    try:
+        if args.mission == "ldsc" or args.mission == "all":
+            logging.info("Calculating LD score")
+            variables = sumstats2ldsc(
+                args.sumstats,
+                args.ref_panel,
+                args.method,
+                args.window_size,
+                args.out,
+            )
+            logging.info(
+                "LD score: Finished in %.2f seconds" % (time.time() - start_time)
+            )
+            if args.mission == "ldsc":
+                logging.info("Mission completed.\n\n")
+                sys.exit(0)
 
-    if args.mission == "all" or args.mission == "h2":
-        logging.info("Calculating heritability")
-        M = variables.shape[0]
-        x = variables["LDSCORE"].values.reshape(-1, 1) * args.N / M
-        y = variables["Z"].values.reshape(-1, 1) ** 2
+        if args.mission == "h2":
+            # only calculate heritability, need to read parameters from file
+            variables = pd.read_csv(args.sumstats, sep="\t")
 
-        #! TEST
-        coef_df = pd.DataFrame({"LDSCORE": x.flatten(), "Z^2": y.flatten()})
-        coef_df.to_csv(args.out + "_coef.txt", sep="\t", index=False)
-        logging.info("Wrote coefficients to {}".format(args.out + "_coef.txt"))
+        if args.mission == "all" or args.mission == "h2":
+            logging.info("Calculating heritability")
+            M = variables.shape[0]
+            x = variables["LDSCORE"].values.reshape(-1, 1) * args.N / M
+            y = variables["Z"].values.reshape(-1, 1) ** 2
 
-        x = np.concatenate([np.ones_like(x), x], axis=1)  # add a column of intercept
-        print(x.shape, y.shape)  #! TEST
-        irwls = irwls.IRLS(x, y)
-        irwls.regression()
-        reg_intercept = irwls.get_intercept()
-        reg_coefficients = irwls.get_coefficients()
-        logging.info("Intercept: %.4f" % reg_intercept)
-        logging.info("h^2: %.4f" % reg_coefficients)
-        logging.info("H^2: Finished in {} seconds".format(time.time() - start_time))
+            #! TEST
+            coef_df = pd.DataFrame({"LDSCORE": x.flatten(), "Z^2": y.flatten()})
+            coef_df.to_csv(args.out + "_coef.txt", sep="\t", index=False)
+            logging.info("Wrote coefficients to {}".format(args.out + "_coef.txt"))
 
-    logging.info("Mission completed.\n\n")
+            x = np.concatenate(
+                [np.ones_like(x), x], axis=1
+            )  # add a column of intercept
+            print(x.shape, y.shape)  #! TEST
+            irwls = irwls.IRLS(x, y)
+            irwls.regression()
+            reg_intercept = irwls.get_intercept()
+            reg_coefficients = irwls.get_coefficients()
+            logging.info("Intercept: %.4f" % reg_intercept)
+            logging.info("h^2: %.4f" % reg_coefficients)
+            logging.info("H^2: Finished in {} seconds".format(time.time() - start_time))
+
+            logging.info("Mission completed.\n\n")
+    except Exception as e:
+        logging.exception(e)
+        logging.error("Mission failed.\n\n")
+        sys.exit(1)

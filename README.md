@@ -31,7 +31,7 @@ python3 ldsc.py \
 -s ./data/full.sumstats \
 -r ./data/eur_w_ld_chr/ \
 -m CM -w 1e-4 \
--o test
+-o ./results/test
 ```
 
 - Calculate LD scores only:
@@ -41,8 +41,8 @@ python3 ldsc.py \
 -M ldsc \
 -s ./data/full.sumstats \
 -r ./data/eur_w_ld_chr/ \
--m CM -w 1e-4 \
--o test
+-m CM -w 1e-2 \
+-o ./results/test
 ```
 
 - Estimate heritability only:
@@ -50,8 +50,9 @@ python3 ldsc.py \
 ```bash
 python3 ldsc.py \
 -M h2 \
--s ./results/test.out \
--o test
+-s ./results/test.txt \
+-n 61220 \
+-o ./results/test
 ```
 
 ## Implementation Details

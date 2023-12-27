@@ -67,7 +67,7 @@ if __name__ == "__main__":
     logger.setLevel(logging.INFO)
 
     # Create a file handler
-    file_handler = logging.FileHandler(os.path.join("results", args.out + ".log"))
+    file_handler = logging.FileHandler(args.out + ".log")
     file_handler.setFormatter(
         logging.Formatter(
             "%(asctime)s - %(levelname)s - %(message)s", "%Y-%m-%d %H:%M:%S"
@@ -86,7 +86,8 @@ if __name__ == "__main__":
     logger.addHandler(file_handler)
     logger.addHandler(stream_handler)
 
-    logging.info("\nMission: {}".format(args.mission))
+    logging.info("Mission: {}".format(args.mission))
+    logging.info("Command: {}".format(" ".join(sys.argv)))
 
     # Run Model ---------------------------
     if args.mission == "ldsc" or args.mission == "all":
@@ -94,25 +95,28 @@ if __name__ == "__main__":
         variables = sumstats2ldsc(
             args.sumstats,
             args.ref_panel,
-            args.N,
             args.method,
             args.window_size,
             args.out,
         )
-        logging.info(
-            "LD score: Finished in {} seconds".format(time.time() - start_time)
-        )
+        logging.info("LD score: Finished in %.2f seconds" % (time.time() - start_time))
     if args.mission == "h2":
         # only calculate heritability, need to read parameters from file
         variables = pd.read_csv(args.sumstats, sep="\t")
 
     if args.mission == "all" or args.mission == "h2":
         logging.info("Calculating heritability")
-        x = variables["LDSCORE"].values.reshape(-1, 1)
-        x = np.concatenate(
-            [np.ones_like(x), x], axis=1
-        )  # add a column of onesintercept
-        y = variables["Z"] ** 2
+        M = variables.shape[0]
+        x = variables["LDSCORE"].values.reshape(-1, 1) * args.N / M
+        y = variables["Z"].values.reshape(-1, 1) ** 2
+
+        #! TEST
+        coef_df = pd.DataFrame({"LDSCORE": x.flatten(), "Z^2": y.flatten()})
+        coef_df.to_csv(args.out + "_coef.txt", sep="\t", index=False)
+        logging.info("Wrote coefficients to {}".format(args.out + "_coef.txt"))
+
+        x = np.concatenate([np.ones_like(x), x], axis=1)  # add a column of intercept
+        print(x.shape, y.shape)  #! TEST
         irwls = irwls.IRLS(x, y)
         irwls.regression()
         reg_intercept = irwls.get_intercept()
@@ -121,4 +125,4 @@ if __name__ == "__main__":
         logging.info("h^2: %.4f" % reg_coefficients)
         logging.info("H^2: Finished in {} seconds".format(time.time() - start_time))
 
-    logging.info("Mission completed.\n")
+    logging.info("Mission completed.\n\n")

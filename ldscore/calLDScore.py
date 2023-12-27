@@ -12,11 +12,16 @@ def read_sumstats(file_path):
     :param file_path: path to .sumstats file
     :return: pandas dataframe with columns 'SNP' and 'Z'
     """
-    df = pd.read_csv(file_path, sep="\t", header=0, usecols=["SNP", "Z"])
+    df = pd.read_csv(file_path, sep="\t", header=0, usecols=["SNP", "Z", "A1", "A2"])
     logging.info("Read {} SNPs from {}".format(df.shape[0], file_path))
     ## delete rows without z-score
     df = df.dropna(subset=["Z"])
-    logging.info("Remain {} SNPs with z-score".format(df.shape[0]))
+    # check if there are duplicated SNPs
+    duplicated = df.duplicated(subset=["SNP"])
+    if np.any(duplicated):
+        df = df[~duplicated]
+        logging.info("Deleted {} duplicated SNPs".format(np.sum(duplicated)))
+    logging.info("Remain {} unique SNPs with z-score".format(df.shape[0]))
 
     return df
 
@@ -30,10 +35,16 @@ def merge_sumstats_with_snplist(sumstats, snplist):
     :param snplist: pandas dataframe with columns 'SNP'
     :return: pandas dataframe with columns 'SNP' and 'Z'
     """
-    merged = pd.merge(sumstats, snplist, on="SNP", how="inner")
-    logging.info("Merged {} SNPs with *.snplist file".format(merged.shape[0]))
+    # check A1 and A2 match
+    # order is not important
+    sumstats[["A1", "A2"]] = np.sort(sumstats[["A1", "A2"]].values, axis=1)
+    snplist[["A1", "A2"]] = np.sort(snplist[["A1", "A2"]].values, axis=1)
 
-    return merged
+    merged = pd.merge(sumstats, snplist, on=["SNP", "A1", "A2"], how="inner")
+    logging.info(
+        "Remain {} SNPs after merged with *.snplist file".format(merged.shape[0])
+    )
+    return merged[["SNP", "Z"]]  # only keep 'SNP' and 'Z'
 
 
 # Get L2 of each SNP
@@ -60,6 +71,8 @@ def get_l2(snplist, ld_dir):
     """
     ## get the dir of LD score files of all chromosomes
     ld_files = glob.glob(os.path.join(ld_dir, "*.l2.ldscore.gz"))
+    ## Delete files contain 'old'
+    ld_files = [ld_file for ld_file in ld_files if "old" not in ld_file]
 
     with mp.Pool() as pool:
         merged_list = pool.starmap(
@@ -89,13 +102,13 @@ def _calc_ldscore_by_chromosome(snplist, method="CM", window_size=1e-2):
     method_values = snplist[method].values
     l2_values = snplist["L2"].values
     start = 0
-    end = -1
-    window_sum = 0.0
-    window_count = 0
+    # estimate the end of the window to accelerate
+    end = half_window_size / (method_values[1] - method_values[0] + 1e-8) * 0.8
+    end = int(end)
+    window_sum = np.sum(l2_values[: end + 1])
     for i in range(n):
-        while start < n and method_values[start] < method_values[i] - half_window_size:
+        while start <= i and method_values[start] < method_values[i] - half_window_size:
             window_sum -= l2_values[start]
-            window_count -= 1
             start += 1
         while (
             end + 1 < n
@@ -103,8 +116,7 @@ def _calc_ldscore_by_chromosome(snplist, method="CM", window_size=1e-2):
         ):
             end += 1
             window_sum += l2_values[end]
-            window_count += 1
-        ldscores[i] = window_sum / window_count
+        ldscores[i] = window_sum
     snplist["LDSCORE"] = ldscores
     return snplist
 
@@ -133,7 +145,7 @@ def calc_ldscore(snplist, method="CM", window_size=1e-2):
 
 
 # From sumstats file to ldscore file
-def sumstats2ldsc(sumstats_file, reference_panel, N, method, window_size, out_file):
+def sumstats2ldsc(sumstats_file, reference_panel, method, window_size, out_file):
     """
     From sumstats file to ldscore file
     :param sumstats_file: path to sumstats file
@@ -142,7 +154,8 @@ def sumstats2ldsc(sumstats_file, reference_panel, N, method, window_size, out_fi
     :param method: method to calculate LD score, 'CM' or 'BP'
     :param window_size: window size to calculate LD score
     :param out_file: path to output file
-    :return: pandas dataframe with columns 'SNP', 'Z', 'CHR', 'M', 'LDSCORE'; M is the number of SNPs in the window, LDSCORE is N/M*\ell
+    :return: pandas dataframe with columns 'SNP', 'Z', 'CHR', 'M', 'LDSCORE'; M is the number of SNPs in the window,
+    LDSCORE is \ell, not N / M * \ell
     """
     ## get absolute path
     path_to_sumstats = os.path.abspath(sumstats_file)
@@ -152,13 +165,12 @@ def sumstats2ldsc(sumstats_file, reference_panel, N, method, window_size, out_fi
     sumstats = read_sumstats(path_to_sumstats)
     ## find *.snplist in reference panel
     path_to_snplist = glob.glob(os.path.join(path_to_reference_panel, "*.snplist"))[0]
-    snplist = pd.read_csv(path_to_snplist, sep="\t", header=0, usecols=["SNP"])
+    snplist = pd.read_csv(path_to_snplist, sep="\t", header=0)
     ## merge sumstats with snplist
     merged = merge_sumstats_with_snplist(sumstats, snplist)
     l2 = get_l2(merged, path_to_reference_panel)
     ## calculate LD score
     snp_ldscore = calc_ldscore(l2, method, window_size)
-    snp_ldscore["LDSCORE"] *= N
     ## write to file
     snp_ldscore.to_csv(out_file + ".txt", sep="\t", index=False)
     logging.info("Wrote LD score to {}".format(out_file))
@@ -174,30 +186,29 @@ if __name__ == "__main__":
     method = "CM"
     window_size = 1e-4
 
-    # Create a logger
-    logger = logging.getLogger()
-    logger.setLevel(logging.INFO)
+    # # Create a logger
+    # logger = logging.getLogger()
+    # logger.setLevel(logging.INFO)
 
-    # Create a file handler
-    file_handler = logging.FileHandler("results/test.log")
-    file_handler.setFormatter(
-        logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
-    )
+    # # Create a file handler
+    # file_handler = logging.FileHandler("results/test.log")
+    # file_handler.setFormatter(
+    #     logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+    # )
 
-    # Create a stream handler
-    stream_handler = logging.StreamHandler(sys.stdout)
-    stream_handler.setFormatter(
-        logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
-    )
+    # # Create a stream handler
+    # stream_handler = logging.StreamHandler(sys.stdout)
+    # stream_handler.setFormatter(
+    #     logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+    # )
 
-    # Add the handlers to the logger
-    logger.addHandler(file_handler)
-    logger.addHandler(stream_handler)
+    # # Add the handlers to the logger
+    # logger.addHandler(file_handler)
+    # logger.addHandler(stream_handler)
 
     ldscore = sumstats2ldsc(
         sumstats_file,
         reference_panel,
-        61220,
         method,
         window_size,
         "results/test",

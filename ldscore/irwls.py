@@ -31,7 +31,7 @@ class IRLS:
         $$\|\mathbf{r}_k - \mathbf{r}_{k+1}\| < \epsilon$$
     """
 
-    def __init__(self, X, y, weights=None, max_iter=10, tol=1e-2):
+    def __init__(self, X, y, weights=None, max_iter=5, tol=1e-2):
         """
         :param X: numpy array of shape (n_samples, n_features)
         :param y: numpy array of shape (n_samples, )

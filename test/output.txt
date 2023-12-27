@@ -1,0 +1,98 @@
+Wed Dec 27 17:33:06 2023    test/output.prof
+
+         76649 function calls (75268 primitive calls) in 9.012 seconds
+
+   Ordered by: cumulative time
+   List reduced from 1397 to 10 due to restriction <10>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+     13/1    0.000    0.000    9.012    9.012 {built-in method builtins.exec}
+        1    0.005    0.005    9.012    9.012 <string>:1(<module>)
+        1    0.039    0.039    9.007    9.007 /Users/lucajiang/learn/CityU/ldsc_notes/runtime_profile.py:6(main)
+        1    0.008    0.008    8.968    8.968 /Users/lucajiang/learn/CityU/ldsc_notes/ldscore/calLDScore.py:160(sumstats2ldsc)
+        8    0.000    0.000    5.149    0.644 /Users/lucajiang/anaconda3/lib/python3.11/threading.py:611(wait)
+        8    0.000    0.000    5.149    0.644 /Users/lucajiang/anaconda3/lib/python3.11/threading.py:295(wait)
+       38    5.149    0.136    5.149    0.136 {method 'acquire' of '_thread.lock' objects}
+        2    0.000    0.000    5.142    2.571 /Users/lucajiang/anaconda3/lib/python3.11/multiprocessing/pool.py:369(starmap)
+        2    0.000    0.000    5.142    2.571 /Users/lucajiang/anaconda3/lib/python3.11/multiprocessing/pool.py:767(get)
+        2    0.000    0.000    5.142    2.571 /Users/lucajiang/anaconda3/lib/python3.11/multiprocessing/pool.py:764(wait)
+
+
+
+   Ordered by: cumulative time
+   List reduced from 1397 to 10 due to restriction <10>
+
+Function                                                                          was called by...
+                                                                                      ncalls  tottime  cumtime
+{built-in method builtins.exec}                                                   <-    11/7    0.000    0.006  <frozen importlib._bootstrap>:233(_call_with_frames_removed)
+                                                                                           1    0.000    0.000  <frozen importlib._bootstrap>:975(exec_module)
+<string>:1(<module>)                                                              <-       1    0.005    9.012  {built-in method builtins.exec}
+/Users/lucajiang/learn/CityU/ldsc_notes/runtime_profile.py:6(main)                <-       1    0.039    9.007  <string>:1(<module>)
+/Users/lucajiang/learn/CityU/ldsc_notes/ldscore/calLDScore.py:160(sumstats2ldsc)  <-       1    0.008    8.968  /Users/lucajiang/learn/CityU/ldsc_notes/runtime_profile.py:6(main)
+/Users/lucajiang/anaconda3/lib/python3.11/threading.py:611(wait)                  <-       2    0.000    5.142  /Users/lucajiang/anaconda3/lib/python3.11/multiprocessing/pool.py:764(wait)
+                                                                                           6    0.000    0.007  /Users/lucajiang/anaconda3/lib/python3.11/threading.py:945(start)
+/Users/lucajiang/anaconda3/lib/python3.11/threading.py:295(wait)                  <-       8    0.000    5.149  /Users/lucajiang/anaconda3/lib/python3.11/threading.py:611(wait)
+{method 'acquire' of '_thread.lock' objects}                                      <-       8    0.000    0.000  /Users/lucajiang/anaconda3/lib/python3.11/threading.py:283(_acquire_restore)
+                                                                                           8    0.000    0.000  /Users/lucajiang/anaconda3/lib/python3.11/threading.py:286(_is_owned)
+                                                                                          16    5.149    5.149  /Users/lucajiang/anaconda3/lib/python3.11/threading.py:295(wait)
+                                                                                           6    0.000    0.000  /Users/lucajiang/anaconda3/lib/python3.11/threading.py:1125(_wait_for_tstate_lock)
+/Users/lucajiang/anaconda3/lib/python3.11/multiprocessing/pool.py:369(starmap)    <-       1    0.000    4.251  /Users/lucajiang/learn/CityU/ldsc_notes/ldscore/calLDScore.py:65(get_l2)
+                                                                                           1    0.000    0.891  /Users/lucajiang/learn/CityU/ldsc_notes/ldscore/calLDScore.py:136(calc_ldscore)
+/Users/lucajiang/anaconda3/lib/python3.11/multiprocessing/pool.py:767(get)        <-       2    0.000    5.142  /Users/lucajiang/anaconda3/lib/python3.11/multiprocessing/pool.py:369(starmap)
+/Users/lucajiang/anaconda3/lib/python3.11/multiprocessing/pool.py:764(wait)       <-       2    0.000    5.142  /Users/lucajiang/anaconda3/lib/python3.11/multiprocessing/pool.py:767(get)
+
+
+
+   Ordered by: cumulative time
+   List reduced from 1397 to 10 due to restriction <10>
+
+Function                                                                          called...
+                                                                                      ncalls  tottime  cumtime
+{built-in method builtins.exec}                                                   ->       1    0.000    0.001  /Users/lucajiang/anaconda3/lib/python3.11/multiprocessing/connection.py:1(<module>)
+                                                                                           1    0.000    0.002  /Users/lucajiang/anaconda3/lib/python3.11/multiprocessing/pool.py:1(<module>)
+                                                                                           1    0.000    0.000  /Users/lucajiang/anaconda3/lib/python3.11/multiprocessing/popen_fork.py:1(<module>)
+                                                                                           1    0.000    0.000  /Users/lucajiang/anaconda3/lib/python3.11/multiprocessing/popen_spawn_posix.py:1(<module>)
+                                                                                           1    0.000    0.000  /Users/lucajiang/anaconda3/lib/python3.11/multiprocessing/queues.py:1(<module>)
+                                                                                           1    0.000    0.002  /Users/lucajiang/anaconda3/lib/python3.11/multiprocessing/resource_tracker.py:1(<module>)
+                                                                                           1    0.000    0.000  /Users/lucajiang/anaconda3/lib/python3.11/multiprocessing/spawn.py:1(<module>)
+                                                                                           1    0.000    0.000  /Users/lucajiang/anaconda3/lib/python3.11/multiprocessing/synchronize.py:1(<module>)
+                                                                                           1    0.000    0.000  /Users/lucajiang/anaconda3/lib/python3.11/multiprocessing/util.py:1(<module>)
+                                                                                           1    0.000    0.000  /Users/lucajiang/anaconda3/lib/python3.11/site-packages/pandas/io/formats/csvs.py:1(<module>)
+                                                                                           1    0.000    0.002  /Users/lucajiang/anaconda3/lib/python3.11/site-packages/zstandard/__init__.py:1(<module>)
+                                                                                           1    0.000    0.000  <frozen runpy>:1(<module>)
+                                                                                           1    0.005    9.012  <string>:1(<module>)
+<string>:1(<module>)                                                              ->       1    0.039    9.007  /Users/lucajiang/learn/CityU/ldsc_notes/runtime_profile.py:6(main)
+/Users/lucajiang/learn/CityU/ldsc_notes/runtime_profile.py:6(main)                ->       1    0.008    8.968  /Users/lucajiang/learn/CityU/ldsc_notes/ldscore/calLDScore.py:160(sumstats2ldsc)
+/Users/lucajiang/learn/CityU/ldsc_notes/ldscore/calLDScore.py:160(sumstats2ldsc)  ->      22    0.000    0.000  /Users/lucajiang/anaconda3/lib/python3.11/_weakrefset.py:39(_remove)
+                                                                                           1    0.000    0.000  /Users/lucajiang/anaconda3/lib/python3.11/glob.py:13(glob)
+                                                                                           1    0.000    0.000  /Users/lucajiang/anaconda3/lib/python3.11/logging/__init__.py:2140(info)
+                                                                                          12    0.000    0.000  /Users/lucajiang/anaconda3/lib/python3.11/multiprocessing/connection.py:131(__del__)
+                                                                                           2    0.000    0.000  /Users/lucajiang/anaconda3/lib/python3.11/multiprocessing/pool.py:266(__del__)
+                                                                                          28    0.000    0.000  /Users/lucajiang/anaconda3/lib/python3.11/multiprocessing/util.py:205(__call__)
+                                                                                           1    0.000    2.084  /Users/lucajiang/anaconda3/lib/python3.11/site-packages/pandas/core/generic.py:3589(to_csv)
+                                                                                           1    0.000    0.278  /Users/lucajiang/anaconda3/lib/python3.11/site-packages/pandas/io/parsers/readers.py:814(read_csv)
+                                                                                          12    0.000    0.000  /Users/lucajiang/anaconda3/lib/python3.11/weakref.py:105(remove)
+                                                                                           1    0.001    0.430  /Users/lucajiang/learn/CityU/ldsc_notes/ldscore/calLDScore.py:9(read_sumstats)
+                                                                                           1    0.013    0.648  /Users/lucajiang/learn/CityU/ldsc_notes/ldscore/calLDScore.py:31(merge_sumstats_with_snplist)
+                                                                                           1    0.004    4.341  /Users/lucajiang/learn/CityU/ldsc_notes/ldscore/calLDScore.py:65(get_l2)
+                                                                                           1    0.002    1.177  /Users/lucajiang/learn/CityU/ldsc_notes/ldscore/calLDScore.py:136(calc_ldscore)
+                                                                                           1    0.000    0.000  <frozen posixpath>:71(join)
+                                                                                           3    0.000    0.000  <frozen posixpath>:397(abspath)
+                                                                                           1    0.000    0.000  {method 'format' of 'str' objects}
+/Users/lucajiang/anaconda3/lib/python3.11/threading.py:611(wait)                  ->       8    0.000    0.000  /Users/lucajiang/anaconda3/lib/python3.11/threading.py:271(__enter__)
+                                                                                           8    0.000    0.000  /Users/lucajiang/anaconda3/lib/python3.11/threading.py:274(__exit__)
+                                                                                           8    0.000    5.149  /Users/lucajiang/anaconda3/lib/python3.11/threading.py:295(wait)
+/Users/lucajiang/anaconda3/lib/python3.11/threading.py:295(wait)                  ->       8    0.000    0.000  /Users/lucajiang/anaconda3/lib/python3.11/threading.py:280(_release_save)
+                                                                                           8    0.000    0.000  /Users/lucajiang/anaconda3/lib/python3.11/threading.py:283(_acquire_restore)
+                                                                                           8    0.000    0.000  /Users/lucajiang/anaconda3/lib/python3.11/threading.py:286(_is_owned)
+                                                                                           8    0.000    0.000  {built-in method _thread.allocate_lock}
+                                                                                          16    5.149    5.149  {method 'acquire' of '_thread.lock' objects}
+                                                                                           8    0.000    0.000  {method 'append' of 'collections.deque' objects}
+{method 'acquire' of '_thread.lock' objects}                                      -> 
+/Users/lucajiang/anaconda3/lib/python3.11/multiprocessing/pool.py:369(starmap)    ->       2    0.000    0.000  /Users/lucajiang/anaconda3/lib/python3.11/multiprocessing/pool.py:471(_map_async)
+                                                                                           2    0.000    5.142  /Users/lucajiang/anaconda3/lib/python3.11/multiprocessing/pool.py:767(get)
+/Users/lucajiang/anaconda3/lib/python3.11/multiprocessing/pool.py:767(get)        ->       2    0.000    0.000  /Users/lucajiang/anaconda3/lib/python3.11/multiprocessing/pool.py:756(ready)
+                                                                                           2    0.000    5.142  /Users/lucajiang/anaconda3/lib/python3.11/multiprocessing/pool.py:764(wait)
+/Users/lucajiang/anaconda3/lib/python3.11/multiprocessing/pool.py:764(wait)       ->       2    0.000    5.142  /Users/lucajiang/anaconda3/lib/python3.11/threading.py:611(wait)
+
+

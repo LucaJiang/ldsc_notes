@@ -70,21 +70,26 @@ def get_l2(snplist, ld_dir):
     :return: pandas dataframe with columns 'SNP', 'Z', 'CHR', 'BP', 'CM', 'L2'
     :algorithm: parallel {open LD score file -> merge with snplist}, then concat
     """
+    chromosomes_id = np.arange(1, 23)
     ## get the dir of LD score files of all chromosomes
-    ld_files = glob.glob(os.path.join(ld_dir, "*.l2.ldscore.gz"))
-    ## Delete files contain 'old'
-    ld_files = [ld_file for ld_file in ld_files if "old" not in ld_file]
+    ld_files = [
+        os.path.join(ld_dir, "{}.l2.ldscore.gz".format(i)) for i in chromosomes_id
+    ]
     logging.info("Merged {} LD score files".format(len(ld_files)))
 
     ## set SNP as index to accelerate
     snplist.set_index("SNP", inplace=True)
-
-    with mp.Pool() as pool:
-        merged_list = pool.starmap(
-            _merge_with_l2, [(ld_file, snplist) for ld_file in ld_files]
+    if False:  # MPI
+        with mp.Pool() as pool:
+            merged_list = pool.starmap(
+                _merge_with_l2, [(ld_file, snplist) for ld_file in ld_files]
+            )
+        # concatenate all chromosomes
+        merged_list = pd.concat(merged_list)
+    else:
+        merged_list = pd.concat(
+            [_merge_with_l2(ld_file, snplist) for ld_file in ld_files]
         )
-    # concatenate all chromosomes
-    merged_list = pd.concat(merged_list)
     len_before = merged_list.shape[0]
     # delete MAF <= 0.01
     merged_list = merged_list[merged_list["MAF"] > 0.01]
@@ -128,7 +133,7 @@ def _calc_ldscore_by_chromosome(snplist, method="CM", window_size=1e-2):
         ):
             end += 1
             window_sum += l2_values[end]
-        ldscores[i] = window_sum
+        ldscores[i] = window_sum / (end - start + 1)
     snplist["LDSCORE"] = ldscores
     return snplist
 
@@ -142,6 +147,7 @@ def calc_ldscore(snplist, method="CM", window_size=1e-2):
     :return: pandas dataframe with columns 'SNP', 'Z', 'CHR', 'M', 'LDSCORE'; M is the number of SNPs in the window; where the LD score has been '/ M'
     """
     chromosomes = snplist["CHR"].unique()
+    chromosomes.sort()
     snplist["LDSCORE"] = np.nan
     with mp.Pool() as pool:
         ldscore_list = pool.starmap(
@@ -157,22 +163,15 @@ def calc_ldscore(snplist, method="CM", window_size=1e-2):
 
 
 # From sumstats file to ldscore file
-def sumstats2ldsc(sumstats_file, reference_panel, method, window_size, out_file):
+def sumstats2ldsc(**kwargs):
     """
     From sumstats file to ldscore file
-    :param sumstats_file: path to sumstats file
-    :param reference_panel: path to reference panel
-    :param N: sample size of reference panel
-    :param method: method to calculate LD score, 'CM' or 'BP'
-    :param window_size: window size to calculate LD score
-    :param out_file: path to output file
-    :return: pandas dataframe with columns 'SNP', 'Z', 'CHR', 'M', 'LDSCORE'; M is the number of SNPs in the window,
-    LDSCORE is \ell, not N / M * \ell
+    :return: pandas dataframe with columns 'SNP', 'Z', 'CHR', 'M', 'l2'; M is the number of SNPs in the window, LDSCORE is l2
     """
     ## get absolute path
-    path_to_sumstats = os.path.abspath(sumstats_file)
-    path_to_reference_panel = os.path.abspath(reference_panel)
-    out_file = os.path.abspath(out_file)
+    path_to_sumstats = os.path.abspath(kwargs["sumstats"])
+    path_to_reference_panel = os.path.abspath(kwargs["ref_panel"])
+    out_file = os.path.abspath(kwargs["out"])
     ## read sumstats
     sumstats = read_sumstats(path_to_sumstats)
     ## find *.snplist in reference panel
@@ -181,8 +180,11 @@ def sumstats2ldsc(sumstats_file, reference_panel, method, window_size, out_file)
     ## merge sumstats with snplist
     merged = merge_sumstats_with_snplist(sumstats, snplist)
     l2 = get_l2(merged, path_to_reference_panel)
-    ## calculate LD score
-    snp_ldscore = calc_ldscore(l2, method, window_size)
+    if kwargs["method"] is not None and kwargs["window_size"] is not None:
+        ## calculate LD score within window measure by method
+        snp_ldscore = calc_ldscore(l2, kwargs["method"], kwargs["window_size"])
+    else:
+        snp_ldscore = l2
     ## write to file
     snp_ldscore.to_csv(out_file + ".txt", sep="\t", index=False)
     logging.info("Wrote LD score to {}".format(out_file))
@@ -193,16 +195,18 @@ def sumstats2ldsc(sumstats_file, reference_panel, method, window_size, out_file)
 import sys
 
 if __name__ == "__main__":
-    sumstats_file = "/Users/lucajiang/learn/CityU/ldsc_notes/data/full.sumstats"
-    reference_panel = "/Users/lucajiang/learn/CityU/ldsc_notes/data/eur_w_ld_chr/"
+    sumstats_file = "./data/full.sumstats"
+    reference_panel = "./data/eur_w_ld_chr/"
     method = "CM"
     window_size = 1e-4
 
-    ldscore = sumstats2ldsc(
-        sumstats_file,
-        reference_panel,
-        method,
-        window_size,
-        "results/test",
-    )
+    dict = {
+        "sumstats": sumstats_file,
+        "ref_panel": reference_panel,
+        "method": method,
+        "window_size": window_size,
+        "out": "results/test",
+    }
+
+    ldscore = sumstats2ldsc(**dict)
     print(ldscore.head())

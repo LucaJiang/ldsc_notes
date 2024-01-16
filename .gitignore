@@ -1,5 +1,7 @@
 ldsc.R
 *.pdf
+*.json
+result_mpi.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

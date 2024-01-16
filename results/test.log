@@ -26,3 +26,232 @@
 2023-12-27 16:22:01 - INFO - Mission completed.
 
 
+2023-12-27 17:37:05 - INFO - Mission: h2
+2023-12-27 17:37:05 - INFO - Command: ldsc.py -M h2 -s ./results/test.txt -n 61220 -o ./results/test
+2023-12-27 17:37:05 - INFO - Calculating heritability
+2023-12-27 17:37:06 - INFO - Wrote coefficients to ./results/test_coef.txt
+2023-12-27 17:37:06 - ERROR - matmul: Input operand 1 has a mismatch in its core dimension 0, with gufunc signature (n?,k),(k,m?)->(n?,m?) (size 1 is different from 853604)
+Traceback (most recent call last):
+  File "/Users/lucajiang/learn/CityU/ldsc_notes/ldsc.py", line 130, in <module>
+    irwls.regression()
+  File "/Users/lucajiang/learn/CityU/ldsc_notes/ldscore/irwls.py", line 95, in regression
+    beta = self._get_beta(self.X, self.y, weights)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/lucajiang/learn/CityU/ldsc_notes/ldscore/irwls.py", line 72, in _get_beta
+    return np.linalg.inv(X.T @ weights @ X) @ X.T @ weights @ y
+                         ~~~~^~~~~~~~~
+ValueError: matmul: Input operand 1 has a mismatch in its core dimension 0, with gufunc signature (n?,k),(k,m?)->(n?,m?) (size 1 is different from 853604)
+2023-12-27 17:37:06 - ERROR - Mission failed.
+
+
+2023-12-27 17:53:43 - INFO - Mission: ldsc
+2023-12-27 17:53:43 - INFO - Command: ldsc.py -M ldsc -s ./data/full.sumstats -r ./data/eur_w_ld_chr/ -m CM -w 1e-2 -o ./results/test
+2023-12-27 17:53:43 - INFO - Calculating LD score
+2023-12-27 17:53:44 - INFO - Read 1217311 SNPs from /Users/lucajiang/learn/CityU/ldsc_notes/data/full.sumstats
+2023-12-27 17:53:44 - INFO - Remain 860636 unique SNPs with z-score
+2023-12-27 17:53:45 - INFO - Remain 860239 SNPs after merged with *.snplist file
+2023-12-27 17:53:45 - INFO - Merged 22 LD score files
+2023-12-27 17:53:49 - INFO - Removed 0 SNPs with MAF <= 0.01
+2023-12-27 17:53:50 - INFO - Calculated LD score for 22 chromosomes
+2023-12-27 17:53:52 - INFO - Wrote LD score to /Users/lucajiang/learn/CityU/ldsc_notes/results/test
+2023-12-27 17:53:52 - INFO - LD score: Finished in 8.75 seconds
+2023-12-27 17:53:52 - INFO - Mission completed.
+
+
+2023-12-27 17:56:58 - INFO - Mission: ldsc
+2023-12-27 17:56:58 - INFO - Command: ldsc.py -M ldsc -s ./data/full.sumstats -r ./data/eur_w_ld_chr/ -m CM -w 1e-2 -o ./results/test
+2023-12-27 17:56:58 - INFO - Calculating LD score
+2023-12-27 17:56:59 - INFO - Read 1217311 SNPs from /Users/lucajiang/learn/CityU/ldsc_notes/data/full.sumstats
+2023-12-27 17:56:59 - INFO - Remain 860636 unique SNPs with z-score
+2023-12-27 17:57:00 - INFO - Remain 860239 SNPs after merged with *.snplist file
+2023-12-27 17:57:00 - INFO - Merged 22 LD score files
+2023-12-27 17:57:04 - INFO - Removed 0 SNPs with MAF <= 0.01
+2023-12-27 17:57:05 - INFO - Calculated LD score for 22 chromosomes
+2023-12-27 17:57:07 - INFO - Wrote LD score to /Users/lucajiang/learn/CityU/ldsc_notes/results/test
+2023-12-27 17:57:07 - INFO - LD score: Finished in 8.82 seconds
+2023-12-27 17:57:07 - INFO - Mission completed.
+
+
+2023-12-27 17:57:50 - INFO - Mission: ldsc
+2023-12-27 17:57:50 - INFO - Command: ldsc.py -M ldsc -s ./data/full.sumstats -r ./data/eur_w_ld_chr/ -m CM -w 1e-2 -o ./results/test
+2023-12-27 17:57:50 - INFO - Calculating LD score
+2023-12-27 17:57:50 - INFO - Read 1217311 SNPs from /Users/lucajiang/learn/CityU/ldsc_notes/data/full.sumstats
+2023-12-27 17:57:50 - INFO - Remain 860636 unique SNPs with z-score
+2023-12-27 17:57:51 - INFO - Remain 860239 SNPs after merged with *.snplist file
+2023-12-27 17:57:51 - INFO - Merged 22 LD score files
+2023-12-27 17:57:55 - ERROR - You are trying to merge on object and int64 columns. If you wish to proceed you should use pd.concat
+multiprocessing.pool.RemoteTraceback: 
+"""
+Traceback (most recent call last):
+  File "/Users/lucajiang/anaconda3/lib/python3.11/multiprocessing/pool.py", line 125, in worker
+    result = (True, func(*args, **kwds))
+                    ^^^^^^^^^^^^^^^^^^^
+  File "/Users/lucajiang/anaconda3/lib/python3.11/multiprocessing/pool.py", line 51, in starmapstar
+    return list(itertools.starmap(args[0], args[1]))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/lucajiang/learn/CityU/ldsc_notes/ldscore/calLDScore.py", line 62, in _merge_with_l2
+    return ldscore.join(snplist, on="SNP", how="inner")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/lucajiang/anaconda3/lib/python3.11/site-packages/pandas/core/frame.py", line 9729, in join
+    return self._join_compat(
+           ^^^^^^^^^^^^^^^^^^
+  File "/Users/lucajiang/anaconda3/lib/python3.11/site-packages/pandas/core/frame.py", line 9768, in _join_compat
+    return merge(
+           ^^^^^^
+  File "/Users/lucajiang/anaconda3/lib/python3.11/site-packages/pandas/core/reshape/merge.py", line 148, in merge
+    op = _MergeOperation(
+         ^^^^^^^^^^^^^^^^
+  File "/Users/lucajiang/anaconda3/lib/python3.11/site-packages/pandas/core/reshape/merge.py", line 741, in __init__
+    self._maybe_coerce_merge_keys()
+  File "/Users/lucajiang/anaconda3/lib/python3.11/site-packages/pandas/core/reshape/merge.py", line 1401, in _maybe_coerce_merge_keys
+    raise ValueError(msg)
+ValueError: You are trying to merge on object and int64 columns. If you wish to proceed you should use pd.concat
+"""
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/lucajiang/learn/CityU/ldsc_notes/ldsc.py", line 96, in <module>
+    variables = sumstats2ldsc(
+                ^^^^^^^^^^^^^^
+  File "/Users/lucajiang/learn/CityU/ldsc_notes/ldscore/calLDScore.py", line 185, in sumstats2ldsc
+    l2 = get_l2(merged, path_to_reference_panel)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/lucajiang/learn/CityU/ldsc_notes/ldscore/calLDScore.py", line 84, in get_l2
+    merged_list = pool.starmap(
+                  ^^^^^^^^^^^^^
+  File "/Users/lucajiang/anaconda3/lib/python3.11/multiprocessing/pool.py", line 375, in starmap
+    return self._map_async(func, iterable, starmapstar, chunksize).get()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/lucajiang/anaconda3/lib/python3.11/multiprocessing/pool.py", line 774, in get
+    raise self._value
+ValueError: You are trying to merge on object and int64 columns. If you wish to proceed you should use pd.concat
+2023-12-27 17:57:55 - ERROR - Mission failed.
+
+
+2023-12-27 18:00:23 - INFO - Mission: ldsc
+2023-12-27 18:00:23 - INFO - Command: ldsc.py -M ldsc -s ./data/full.sumstats -r ./data/eur_w_ld_chr/ -m CM -w 1e-2 -o ./results/test
+2023-12-27 18:00:23 - INFO - Calculating LD score
+2023-12-27 18:00:23 - INFO - Read 1217311 SNPs from /Users/lucajiang/learn/CityU/ldsc_notes/data/full.sumstats
+2023-12-27 18:00:23 - INFO - Remain 860636 unique SNPs with z-score
+2023-12-27 18:00:24 - INFO - Remain 860239 SNPs after merged with *.snplist file
+2023-12-27 18:00:24 - INFO - Merged 22 LD score files
+2023-12-27 18:00:28 - INFO - Removed 0 SNPs with MAF <= 0.01
+2023-12-27 18:00:29 - INFO - Calculated LD score for 22 chromosomes
+2023-12-27 18:00:32 - INFO - Wrote LD score to /Users/lucajiang/learn/CityU/ldsc_notes/results/test
+2023-12-27 18:00:32 - INFO - LD score: Finished in 8.69 seconds
+2023-12-27 18:00:32 - INFO - Mission completed.
+
+
+2023-12-29 15:55:03 - INFO - Mission: all
+2023-12-29 15:55:03 - INFO - Command: ldsc.py -M all -s ./data/full.sumstats -r ./data/eur_w_ld_chr/ -m CM -w 1e-4 -o ./results/test
+2023-12-29 15:55:03 - INFO - Calculating LD score
+2023-12-29 15:55:04 - INFO - Read 1217311 SNPs from /Users/lucajiang/learn/CityU/ldsc_notes/data/full.sumstats
+2023-12-29 15:55:04 - INFO - Remain 860636 unique SNPs with z-score
+2023-12-29 15:55:05 - INFO - Remain 860239 SNPs after merged with *.snplist file
+2023-12-29 15:55:05 - INFO - Merged 22 LD score files
+2023-12-29 15:55:09 - INFO - Removed 0 SNPs with MAF <= 0.01
+2023-12-29 15:55:10 - INFO - Calculated LD score for 22 chromosomes
+2023-12-29 15:55:12 - INFO - Wrote LD score to /Users/lucajiang/learn/CityU/ldsc_notes/results/test
+2023-12-29 15:55:12 - INFO - LD score: Finished in 8.83 seconds
+2023-12-29 15:55:12 - INFO - Calculating heritability
+2023-12-29 15:55:14 - INFO - Wrote coefficients to ./results/test_coef.txt
+2023-12-29 15:55:14 - INFO - Intercept: 0.3540
+2023-12-29 15:55:14 - INFO - h^2: 0.3540
+2023-12-29 15:55:14 - INFO - H^2: Finished in 10.61939001083374 seconds
+2023-12-29 15:55:14 - INFO - Mission completed.
+
+
+2024-01-16 19:52:06 - INFO - Mission: ldsc
+2024-01-16 19:52:06 - INFO - Command: ldsc.py -M ldsc -s ./data/full.sumstats -r ./data/eur_w_ld_chr/ -o ./results/test
+2024-01-16 19:52:06 - INFO - Calculating LD score
+2024-01-16 19:52:06 - ERROR - 'sumstats_file'
+Traceback (most recent call last):
+  File "/Users/lucajiang/learn/CityU/ldsc_notes/ldsc.py", line 96, in <module>
+    variables = sumstats2ldsc(**vars(args))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/lucajiang/learn/CityU/ldsc_notes/ldscore/calLDScore.py", line 168, in sumstats2ldsc
+    path_to_sumstats = os.path.abspath(kwargs["sumstats_file"])
+                                       ~~~~~~^^^^^^^^^^^^^^^^^
+KeyError: 'sumstats_file'
+2024-01-16 19:52:06 - ERROR - Mission failed.
+
+
+2024-01-16 19:53:25 - INFO - Mission: ldsc
+2024-01-16 19:53:25 - INFO - Command: ldsc.py -M ldsc -s ./data/full.sumstats -r ./data/eur_w_ld_chr/ -o ./results/test
+2024-01-16 19:53:25 - INFO - Calculating LD score
+2024-01-16 19:53:26 - INFO - Read 1217311 SNPs from /Users/lucajiang/learn/CityU/ldsc_notes/data/full.sumstats
+2024-01-16 19:53:26 - INFO - Remain 860636 unique SNPs with z-score
+2024-01-16 19:53:27 - INFO - Remain 860239 SNPs after merged with *.snplist file
+2024-01-16 19:53:27 - INFO - Merged 22 LD score files
+2024-01-16 19:53:34 - INFO - Removed 0 SNPs with MAF <= 0.01
+2024-01-16 19:53:36 - INFO - Wrote LD score to /Users/lucajiang/learn/CityU/ldsc_notes/results/test
+2024-01-16 19:53:36 - INFO - LD score: Finished in 11.16 seconds
+2024-01-16 19:53:36 - INFO - Mission completed.
+
+
+2024-01-16 19:58:42 - INFO - Mission: ldsc
+2024-01-16 19:58:42 - INFO - Command: ldsc.py -M ldsc -s ./data/full.sumstats -r ./data/eur_w_ld_chr/ -o ./results/test
+2024-01-16 19:58:42 - INFO - Calculating LD score
+2024-01-16 19:58:43 - INFO - Read 1217311 SNPs from /Users/lucajiang/learn/CityU/ldsc_notes/data/full.sumstats
+2024-01-16 19:58:43 - INFO - Remain 860636 unique SNPs with z-score
+2024-01-16 19:58:44 - INFO - Remain 860239 SNPs after merged with *.snplist file
+2024-01-16 19:58:44 - INFO - Merged 22 LD score files
+2024-01-16 19:58:51 - INFO - Removed 0 SNPs with MAF <= 0.01
+2024-01-16 19:58:54 - INFO - Wrote LD score to /Users/lucajiang/learn/CityU/ldsc_notes/results/test
+2024-01-16 19:58:55 - INFO - LD score: Finished in 12.47 seconds
+2024-01-16 19:58:55 - INFO - Mission completed.
+
+
+2024-01-16 20:03:47 - INFO - Mission: ldsc
+2024-01-16 20:03:47 - INFO - Command: ldsc.py -M ldsc -s ./data/full.sumstats -r ./data/eur_w_ld_chr/ -o ./results/test
+2024-01-16 20:03:47 - INFO - Calculating LD score
+2024-01-16 20:03:47 - INFO - Read 1217311 SNPs from /Users/lucajiang/learn/CityU/ldsc_notes/data/full.sumstats
+2024-01-16 20:03:47 - INFO - Remain 860636 unique SNPs with z-score
+2024-01-16 20:03:49 - INFO - Remain 860239 SNPs after merged with *.snplist file
+2024-01-16 20:03:49 - INFO - Merged 22 LD score files
+2024-01-16 20:03:54 - INFO - Removed 0 SNPs with MAF <= 0.01
+2024-01-16 20:03:56 - INFO - Wrote LD score to /Users/lucajiang/learn/CityU/ldsc_notes/results/test
+2024-01-16 20:03:57 - INFO - LD score: Finished in 9.92 seconds
+2024-01-16 20:03:57 - INFO - Mission completed.
+
+
+2024-01-16 20:05:40 - INFO - Mission: ldsc
+2024-01-16 20:05:40 - INFO - Command: ldsc.py -M ldsc -s ./data/full.sumstats -r ./data/eur_w_ld_chr/ -o ./results/test
+2024-01-16 20:05:40 - INFO - Calculating LD score
+2024-01-16 20:05:40 - INFO - Read 1217311 SNPs from /Users/lucajiang/learn/CityU/ldsc_notes/data/full.sumstats
+2024-01-16 20:05:40 - INFO - Remain 860636 unique SNPs with z-score
+2024-01-16 20:05:42 - INFO - Remain 860239 SNPs after merged with *.snplist file
+2024-01-16 20:05:42 - INFO - Merged 22 LD score files
+2024-01-16 20:05:48 - INFO - Removed 0 SNPs with MAF <= 0.01
+2024-01-16 20:05:51 - INFO - Wrote LD score to /Users/lucajiang/learn/CityU/ldsc_notes/results/test
+2024-01-16 20:05:51 - INFO - LD score: Finished in 10.95 seconds
+2024-01-16 20:05:51 - INFO - Mission completed.
+
+
+2024-01-16 20:10:06 - INFO - Mission: ldsc
+2024-01-16 20:10:06 - INFO - Command: ldsc.py -M ldsc -s ./data/full.sumstats -r ./data/eur_w_ld_chr/ -o ./results/test
+2024-01-16 20:10:06 - INFO - Calculating LD score
+2024-01-16 20:10:07 - INFO - Read 1217311 SNPs from /Users/lucajiang/learn/CityU/ldsc_notes/data/full.sumstats
+2024-01-16 20:10:07 - INFO - Remain 860636 unique SNPs with z-score
+2024-01-16 20:10:08 - INFO - Remain 860239 SNPs after merged with *.snplist file
+2024-01-16 20:10:08 - INFO - Merged 22 LD score files
+2024-01-16 20:10:13 - INFO - Removed 0 SNPs with MAF <= 0.01
+2024-01-16 20:10:15 - INFO - Wrote LD score to /Users/lucajiang/learn/CityU/ldsc_notes/results/test
+2024-01-16 20:10:15 - INFO - LD score: Finished in 9.21 seconds
+2024-01-16 20:10:15 - INFO - Mission completed.
+
+
+2024-01-16 20:57:22 - INFO - Mission: ldsc
+2024-01-16 20:57:22 - INFO - Command: ldsc.py -M ldsc -s ./data/full.sumstats -r ./data/eur_w_ld_chr/ -o ./results/test
+2024-01-16 20:57:22 - INFO - Calculating LD score
+2024-01-16 20:57:22 - INFO - Read 1217311 SNPs from /Users/lucajiang/learn/CityU/ldsc_notes/data/full.sumstats
+2024-01-16 20:57:23 - INFO - Remain 860636 unique SNPs with z-score
+2024-01-16 20:57:24 - INFO - Remain 860239 SNPs after merged with *.snplist file
+2024-01-16 20:57:24 - INFO - Merged 22 LD score files
+2024-01-16 20:57:28 - INFO - Removed 0 SNPs with MAF <= 0.01
+2024-01-16 20:57:31 - INFO - Wrote LD score to /Users/lucajiang/learn/CityU/ldsc_notes/results/test
+2024-01-16 20:57:31 - INFO - Finished in 9.28 seconds
+2024-01-16 20:57:31 - INFO - Mission completed.
+
+

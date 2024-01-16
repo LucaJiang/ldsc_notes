@@ -4,7 +4,6 @@ python3 ldsc.py \
 -M all \
 -s ./data/full.sumstats \
 -r ./data/eur_w_ld_chr/ \
--m CM -w 1e-4 \
 -o ./results/test
 ```
 
@@ -14,7 +13,6 @@ python3 ldsc.py \
 -M ldsc \
 -s ./data/full.sumstats \
 -r ./data/eur_w_ld_chr/ \
--m CM -w 1e-2 \
 -o ./results/test
 ```
 

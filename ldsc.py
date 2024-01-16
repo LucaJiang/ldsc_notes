@@ -39,14 +39,14 @@ parser.add_argument(
     "--method",
     "-m",
     type=str,
-    default="CM",
+    default="None",
     help="Method to calculate LD score, 'CM' or 'BP'",
 )
 parser.add_argument(
     "--window_size",
     "-w",
     type=float,
-    default=1e-2,
+    default=None,
     help="Window size to calculate LD score",
 )
 parser.add_argument(
@@ -93,46 +93,41 @@ if __name__ == "__main__":
     try:
         if args.mission == "ldsc" or args.mission == "all":
             logging.info("Calculating LD score")
-            variables = sumstats2ldsc(
-                args.sumstats,
-                args.ref_panel,
-                args.method,
-                args.window_size,
-                args.out,
-            )
-            logging.info(
-                "LD score: Finished in %.2f seconds" % (time.time() - start_time)
-            )
+            variables = sumstats2ldsc(**vars(args))
+            logging.info("Finished in %.2f seconds" % (time.time() - start_time))
             if args.mission == "ldsc":
                 logging.info("Mission completed.\n\n")
                 sys.exit(0)
 
-        if args.mission == "h2":
+        elif args.mission == "h2":
             # only calculate heritability, need to read parameters from file
             variables = pd.read_csv(args.sumstats, sep="\t")
 
         if args.mission == "all" or args.mission == "h2":
             logging.info("Calculating heritability")
             M = variables.shape[0]
-            x = variables["LDSCORE"].values.reshape(-1, 1) * args.N / M
+            x = variables["L2"].values.reshape(-1, 1) * args.N / M
+            l2 = variables["L2"].values.reshape(-1, 1)
             y = variables["Z"].values.reshape(-1, 1) ** 2
 
             #! TEST
-            coef_df = pd.DataFrame({"LDSCORE": x.flatten(), "Z^2": y.flatten()})
+            coef_df = pd.DataFrame(
+                {"L2": l2.flatten(), "x": x.flatten(), "Z^2": y.flatten()}
+            )
             coef_df.to_csv(args.out + "_coef.txt", sep="\t", index=False)
             logging.info("Wrote coefficients to {}".format(args.out + "_coef.txt"))
 
             x = np.concatenate(
                 [np.ones_like(x), x], axis=1
             )  # add a column of intercept
-            print(x.shape, y.shape)  #! TEST
-            irwls = irwls.IRLS(x, y)
+            # print(x.shape, y.shape)  #! TEST
+            irwls = irwls.IRLS(x, y, weights=l2)
             irwls.regression()
             reg_intercept = irwls.get_intercept()
             reg_coefficients = irwls.get_coefficients()
             logging.info("Intercept: %.4f" % reg_intercept)
             logging.info("h^2: %.4f" % reg_coefficients)
-            logging.info("H^2: Finished in {} seconds".format(time.time() - start_time))
+            logging.info("Finished in {} seconds".format(time.time() - start_time))
 
             logging.info("Mission completed.\n\n")
     except Exception as e:

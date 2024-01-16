@@ -9,8 +9,14 @@ Notes for LD Score Regression.
   - [Structure of the Repository](#structure-of-the-repository)
   - [How to Run](#how-to-run)
   - [Implementation Details](#implementation-details)
+  - [Analysis of MPI](#analysis-of-mpi)
   - [Presentation Page](#presentation-page)
   - [Reference](#reference)
+
+<!-- TODO: -->
+TODO:
+Delete sliding window, because the l2 in reference panel is already the LD score.
+Figure out why 'M=1173569' which is the number of SNPs in the reference panel.
 
 ## Structure of the Repository
 
@@ -19,6 +25,7 @@ Notes for LD Score Regression.
   - 'ldsc.py' file: the entry point of LDSC.
   - 'data' folder: the data used by LDSC, i.e. $\ell^2$ and reference panel.
   - 'results' folder: the output log of LDSC.
+  - 'test' folder: the test code and results. Mostly used for analysis performance.
 - 'gh-pages' branch: the code of the presentation page.
 
 ## How to Run
@@ -68,7 +75,7 @@ python3 ldsc.py \
 - [x] LD Score Calculation with MPI
   - [x] Delete MAF <= 0.01 SNPs, ignore the order of 'A1' and 'A2'
   - [x] Mapping from SNP in sumsstats to SNP in reference panel
-  - [x] Calculate LD Score in each chromosome with sliding window
+  - [x] LD Score is the 'l2' column in the reference panel
 - [ ] Iterative ReWeighted Least Squares(IRWLS):
   $$\mathbf{Y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\epsilon}$$
 $$\text{argmin}\_{\boldsymbol{\beta}} \sum_{i=1}^n ||y_i - \mathbf{x}_i\boldsymbol{\beta}||_p$$
@@ -88,6 +95,14 @@ $$\text{argmin}\_{\boldsymbol{\beta}} \sum_{i=1}^n ||y_i - \mathbf{x}_i\boldsymb
 
   - [ ] jackknife estimate of the variance:
       <!-- $$\hat{\sigma}^2 = \frac{1}{n}\sum_{i=1}^n \frac{r_i^2}{w_i}$$ -->
+
+## Analysis of MPI
+
+```bash
+vizviewer result_mpi.json
+```
+
+You may install `vizviewer` python package first.
 
 ## Presentation Page
 

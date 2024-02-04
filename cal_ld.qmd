@@ -1,0 +1,61 @@
+---
+title: "Calculate LD"
+author: "Jiang Wenxin"
+date: "`r format(Sys.time(), '%Y-%m-%d')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Load libraries
+
+```{r library, eval=F}
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+    install.packages("BiocManager")
+}
+
+BiocManager::install("snpStats")
+```
+
+## Load data in plink format
+
+```{r}
+library(snpStats)
+data.path <- "/Users/lucajiang/learn/CityU/UKBheight/height_ukb_50k_chr22"
+bed.file <- paste0(data.path, ".bed")
+fam.file <- paste0(data.path, ".fam")
+bim.file <- paste0(data.path, ".bim")
+
+data <- read.plink(bed.file, bim.file, fam.file)
+str(data) # 50k*44717
+```
+
+## Calculate r2 of SNPs
+
+```{r}
+# snp.list <- data$map$snp.name
+# snp.position <- data$map$position
+geno.r2 <- ld(data$genotypes, depth = 5, stats = "R.squared", symmetric = FALSE)
+geno.r2[1:10, 1:10]
+```
+
+Compare the result with the plink output:
+
+```         
+ CHR_A         BP_A       SNP_A  CHR_B         BP_B       SNP_B           R2 
+    22     17202602   rs2845379     22     17208726   rs2529893     0.442801 
+    22     17202602   rs2845379     22     17214008   rs2845345     0.389509 
+    22     17202602   rs2845379     22     17214252   rs2845346     0.388277 
+    22     17202602   rs2845379     22     17214669   rs2845347      0.38933 
+    22     17202602   rs2845379     22     17221495   rs1807512     0.305765 
+    22     17202602   rs2845379     22     17224835   rs5992534     0.304389 
+    22     17202602   rs2845379     22     17225692   rs5748586      0.30569 
+    22     17202602   rs2845379     22     17227461   rs5748593     0.344759 
+    22     17208726   rs2529893     22     17214008   rs2845345     0.878642 
+    22     17208726   rs2529893     22     17214252   rs2845346     0.874023 
+    22     17208726   rs2529893     22     17214669   rs2845347     0.878119 
+    22     17208726   rs2529893     22     17227461   rs5748593     0.815144 
+    22     17208726   rs2529893     22     17265124   rs5748623     0.213372 
+```

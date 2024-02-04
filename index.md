@@ -3,13 +3,14 @@
 
 Jiang Wenxin
 
-2023.12.22
+2023.02.04
 
 --------------------
 
 - [Notes on LDSC](#notes-on-ldsc)
   - [Motivation, Aims and Formula](#motivation-aims-and-formula)
   - [Individual-Level Model](#individual-level-model)
+  - [From Individual-level data to r squared](#from-individual-level-data-to-r-squared)
   - [From Individual-level to LD Score and Heritability](#from-individual-level-to-ld-score-and-heritability)
   - [Summary-Level Model](#summary-level-model)
     - [Proof of Proposition 1](#proof-of-proposition-1)
@@ -26,7 +27,10 @@ Jiang Wenxin
 
 - **Individual-level model:** $\phi=X\beta+\epsilon$. If individual data is available, we can estimate the effect size $\beta$ directly.
 - **Summary-level data:** If only the z-score of variant $j$
-$$z_j=\left(\hat{\beta}_j-\bar{\beta}_j\right)/\text{SE}_j=\hat{\beta}_j$$
+
+$$
+z_j=\left(\hat{\beta}_j-\bar{\beta}_j\right)/\text{SE}_j=\hat{\beta}_j
+$$
 is available, where $\hat{\beta}_j$ is the estimated effect size and $\text{SE}_j$ is the standard error of $\hat{\beta}_j$, then calculate the $\chi^2$ statistic of variant $j$ with $$\chi^2_j=N\hat{\beta}_j^2=Nz_j^2.$$
 
 --------------------
@@ -40,9 +44,11 @@ where $\ell_j$ is the LD score of variant $j$, $h_g^2$ is the SNP heritability, 
 ## Individual-Level Model
 
 **Model:**
-$$\begin{equation}
+$$
+\begin{equation}
 \phi=X\beta+\epsilon\tag{1.1}
-\end{equation}$$
+\end{equation}
+$$
 
 <!-- $\phi$: N by 1 vector of phenotypes
 
@@ -78,6 +84,23 @@ $\epsilon$: N by 1 vector of environmental effects
 
 --------------------
 
+## From Individual-level data to r squared
+
+Suppose in gene A, we have alleles $A_1$ and $A_2$ and in gene B, we have alleles $B_1$ and $B_2$. The frequency of $A_1$ is $p_1$, and the frequency of $B_1$ is $q_1$.
+
+Then, there are 4 possible combinations of alleles: $A_1B_1$, $A_1B_2$, $A_2B_1$ and $A_2B_2$. Let $p_{ij}$ be the frequency of the $A_iB_j$ genotype.
+
+**Linkage disequilibrium (LD):**
+$$D:=p_{11}-p_{1}q_{1}$$
+
+Let $D_\text{max}=\min\{p_{1}q_2,p_2q_1\}$ and $D_\text{min}=\max\{-p_{1}q_1,-p_2q_2\}$.
+
+**D':**=(D/D_max) if D>0; (D/D_min) if D<0
+
+**r squared:**=$D^2/p_1p_2q_1q_2$
+
+--------------------
+
 ## From Individual-level to LD Score and Heritability
 
 **Linkage disequilibrium (LD):**
@@ -94,7 +117,8 @@ $$\begin{equation}\ell_j:=\sum_{k=1}^M r_{jk}^2\tag{1.2}\end{equation}$$
 $$\begin{equation*}
 % h_g^2=\frac{\text{Var}\left[\phi|X\right]-I}{XX^\text{T}/M-I}
 \text{Var}\left[\phi|X\right]=\frac{h_g^2}{M}XX^\text{T}+\left(1-h_g^2\right)I
-\end{equation*}$$
+\end{equation*}
+$$
 
 *Note:* $h_g^2$ is the proportion of phenotypic variance explained by the genotypes. It is also called the SNP heritability. It is the ratio of the variance of the phenotype explained by the genotypes to the total variance of the phenotype.
 
@@ -121,7 +145,8 @@ $$\begin{equation*}\begin{aligned}
 \mathbb{E}\left[\chi^2_j\right]&=\mathbb{E}\left[N\hat{\beta}_j^2\right]\\
 &=N\left(\text{Var}\left[\hat{\beta}_j\right]+\mathbb{E}^2\left[\hat{\beta}_j\right]\right)\qquad [\text{MoM}]\\
 &=N\text{Var}\left[\hat{\beta}_j\right] \qquad \left[\mathbb{E}\left[\hat{\beta}_j\right]=0 \right]\\
-\end{aligned}\end{equation*}$$
+\end{aligned}\end{equation*}
+$$
 
 Obtain $\text{Var}\left[\hat{\beta}_j\right]$ by the law of total variance:
 $$\begin{equation}\begin{aligned}
@@ -130,7 +155,8 @@ $$\begin{equation}\begin{aligned}
 &=\mathbb{E}\left[\text{Var}\left[X_j^\text{T}\phi/N|X\right]\right] \qquad \left[\text{LSE}: \hat{\beta}_j=X_j^\text{T}\phi/N \right]\\
 &=\mathbb{E}\left[X_j\text{Var}\left[\phi|X\right]X_j^\text{T}/N^2\right]\\
 &=\mathbb{E}\left[\frac{h_g^2}{MN^2}X_j^\text{T}XX^\text{T}X_j+\frac{1-h_g^2}{N}\right] \quad \left[X_j^\text{T}X_j=N\right]
-\end{aligned}\tag{1.4}\end{equation}$$
+\end{aligned}\tag{1.4}\end{equation}
+$$
 
 --------------------
 
@@ -145,7 +171,8 @@ $$\begin{equation}\begin{aligned}
 % &=\frac{1}{N^2}\sum_{i=1}^N\text{Var}\left[X_{ij}X_{ik}\right]+r_{jk}^2 \qquad \left[\mathbb{E}\left[X_{ij}X_{ik}\right]=r_{jk}\right]\\
 &\approx r_{jk}^2+(1-r_{jk}^2)/N \qquad \left[\text{delta method}\right]
 % \textbf{??}
-\end{aligned}\tag{1.7}\end{equation}$$
+\end{aligned}\tag{1.7}\end{equation}
+$$
 
 > [Discussions on google group](https://groups.google.com/g/ldsc_users/c/mxbnbodkGj0):
 >
@@ -154,8 +181,7 @@ $$\begin{equation}\begin{aligned}
 > Here $\mu_2^{\prime}$ is the 2nd moment of sample correlation, $\rho$ is the population correlation coefficient, $\mathrm{n}$ is # observations.
 
 <!-- $$
-F\left(\alpha, \beta, \delta ; \rho^2\right)=\frac{\Gamma(\delta)}{\Gamma(\alpha) \Gamma(\beta)} \sum_{j=0}^{\infty} \frac{\Gamma(\alpha+j) \Gamma(\beta+j)}{\Gamma(\delta+j)} \frac{\left(\rho^2\right)^j}{j !}
-$$ -->
+F\left(\alpha, \beta, \delta ; \rho^2\right)=\frac{\Gamma(\delta)}{\Gamma(\alpha) \Gamma(\beta)} \sum_{j=0}^{\infty} \frac{\Gamma(\alpha+j) \Gamma(\beta+j)}{\Gamma(\delta+j)} \frac{\left(\rho^2\right)^j}{j !}$$ -->
 
 --------------------
 
@@ -163,7 +189,8 @@ We have
 $$\begin{equation}\begin{aligned}
 \mathbb{E}\left[\sum_{k=1}^M \tilde{r}_{jk}^2\right] &\approx \sum_{k=1}^M r_{jk}^2+\frac{\sum_{k=1}^M\left(1-r_{jk}^2\right)}{N}\\
 &\approx \ell_j+\frac{M-\ell_j}{N} \qquad \left[\text{def. of } \ell_j\right]
-\end{aligned}\tag{1.8}\end{equation}$$
+\end{aligned}\tag{1.8}\end{equation}
+$$
 
 Therefore, we can continue the derivation of $\text{Var}\left[\hat{\beta}_j\right]$ as
 $$\begin{equation*}\begin{aligned}
@@ -173,7 +200,8 @@ $$\begin{equation*}\begin{aligned}
 &=\frac{h_g^2}{MN^2}\left(\ell_j+\frac{M-\ell_j}{N}\right)+\frac{1-h_g^2}{N} \qquad \left[\text{Eq. (1.8)}\right]\\
 &=\frac{(1-1/N)h_g^2}{M}\ell_j+\frac{1}{N}\\
 &\approx\frac{h_g^2}{M}\ell_j+\frac{1}{N} \qquad \left[1-1/N\rightarrow 1\right]
-\end{aligned}\end{equation*}$$
+\end{aligned}\end{equation*}
+$$
 
 --------------------
 
@@ -275,11 +303,11 @@ $$
 Parameters $\rho_i(i=1, \ldots, K)$ quantify the genetic covariance components for each functional annotation. GNOVA used an estimator based on the method of moments to estimate genetic covariance:
 $$
 \left(\begin{array}{c}
-\hat{\rho}_1 \\
+\hat{\rho}*1 \\
 \vdots \\
-\hat{\rho}_K
+\hat{\rho}*K
 \end{array}\right)=\frac{1}{\sqrt{n_1 n_2}}\left(\begin{array}{ccc}
-\frac{1}{m_1 m_1} l_{11} & \cdots & \frac{1}{m_K m_1} l_{K 1} \\
+\frac{1}{m_1 m_1} l*{11} & \cdots & \frac{1}{m_K m_1} l*{K 1} \\
 \vdots & \ddots & \vdots \\
 \frac{1}{m_1 m_K} l_{1 K} & \cdots & \frac{1}{m_K m_K} l_{K K}
 \end{array}\right)^{-1}\left(\begin{array}{c}
@@ -300,7 +328,7 @@ To date, LD score regression is not able to estimate annotation-stratified genet
 
 1. B. K. Bulik-Sullivan et al., LD Score regression distinguishes confounding from polygenicity in genome-wide association studies, Nat Genet, vol. 47, no. 3, Art. no. 3, Mar. 2015, doi: 10.1038/ng.3211.
 
-2. https://github.com/YangLabHKUST/XMAP/blob/main/R/ldsc.R
+2. <https://github.com/YangLabHKUST/XMAP/blob/main/R/ldsc.R>
 
 3. Handbook of statistical genomics[M]. John Wiley & Sons, 2019.
 

@@ -255,3 +255,13 @@ KeyError: 'sumstats_file'
 2024-01-16 20:57:31 - INFO - Mission completed.
 
 
+2024-01-17 10:52:26 - INFO - Mission: h2
+2024-01-17 10:52:26 - INFO - Command: ldsc.py -M h2 -s ./results/test.txt -n 61220 -o ./results/test
+2024-01-17 10:52:26 - INFO - Calculating heritability
+2024-01-17 10:52:28 - INFO - Wrote coefficients to ./results/test_coef.txt
+2024-01-17 10:52:28 - INFO - Intercept: 0.3329
+2024-01-17 10:52:28 - INFO - h^2: 0.3329
+2024-01-17 10:52:28 - INFO - Finished in 1.867994785308838 seconds
+2024-01-17 10:52:28 - INFO - Mission completed.
+
+

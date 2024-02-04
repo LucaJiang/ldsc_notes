@@ -36,6 +36,13 @@ parser.add_argument(
     help="Sample size of reference panel",
 )
 parser.add_argument(
+    "--M",
+    "-M",
+    type=int,
+    default=1173569,
+    help="TODO: From .M_5_50",
+)
+parser.add_argument(
     "--method",
     "-m",
     type=str,
@@ -105,7 +112,7 @@ if __name__ == "__main__":
 
         if args.mission == "all" or args.mission == "h2":
             logging.info("Calculating heritability")
-            M = variables.shape[0]
+            M = args.M
             x = variables["L2"].values.reshape(-1, 1) * args.N / M
             l2 = variables["L2"].values.reshape(-1, 1)
             y = variables["Z"].values.reshape(-1, 1) ** 2
@@ -127,7 +134,7 @@ if __name__ == "__main__":
             reg_coefficients = irwls.get_coefficients()
             logging.info("Intercept: %.4f" % reg_intercept)
             logging.info("h^2: %.4f" % reg_coefficients)
-            logging.info("Finished in {} seconds".format(time.time() - start_time))
+            logging.info("Finished in %.2f seconds" % (time.time() - start_time))
 
             logging.info("Mission completed.\n\n")
     except Exception as e:

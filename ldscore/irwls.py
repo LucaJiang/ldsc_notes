@@ -49,7 +49,7 @@ class IRLS:
         self.y = y
         self.fix_intercept = fix_intercept
         if weights is not None:
-            self.weights = weights
+            self.weights = np.sqrt(weights)
         else:
             self.weights = np.ones_like(y)
         self.max_iter = max_iter
@@ -81,6 +81,8 @@ class IRLS:
         In ldsc.r: weight = 1 / (2 * pred ** 2)
         """
         weights = pred ** (-1 / 2) / 2 / self.weights
+        # weights = pred ** (-1 / 2) / 2 # x
+        # weights /= weights.sum()
         return weights
 
     def predict(self, X):
@@ -111,6 +113,7 @@ class IRLS:
             weights = self._get_weights_yhat(self.predict(self.X))
             # Update the regression coefficient with weighted least squares
             self.beta = self._get_beta(self.X, self.y, weights)
+
         # Save results
         # self.residuals = residuals
 
@@ -144,6 +147,6 @@ if __name__ == "__main__":
     print("Intercept = %.4f" % irwls.get_intercept())
     print("h_g^2 = %.4f" % irwls.get_coefficients())
 
-    # irwls_fix = IRLS(x, y - irwls.get_intercept(), fix_intercept=True)
-    # irwls_fix.regression()
-    # print("h_g^2 fix = %.4f" % irwls_fix.get_coefficients())
+    irwls_fix = IRLS(x, y - irwls.get_intercept(), fix_intercept=True)
+    irwls_fix.regression()
+    print("h_g^2 fix = %.4f" % irwls_fix.get_coefficients())

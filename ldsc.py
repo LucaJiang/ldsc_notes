@@ -11,7 +11,7 @@ parser = argparse.ArgumentParser(
 )
 parser.add_argument(
     "--mission",
-    "-M",
+    "-mi",
     type=str,
     default="all",
     help="Mission to run, 'all', 'ldsc', or 'h2'",
@@ -37,7 +37,6 @@ parser.add_argument(
 )
 parser.add_argument(
     "--M",
-    "-M",
     type=int,
     default=1173569,
     help="TODO: From .M_5_50",

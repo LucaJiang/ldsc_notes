@@ -53,7 +53,7 @@ python3 ldsc.py \
 
 ```bash
 python3 ldsc.py \
--M ldsc \
+-mi ldsc \
 -s ./data/full.sumstats \
 -r ./data/eur_w_ld_chr/ \
 -m CM -w 1e-2 \
@@ -64,7 +64,7 @@ python3 ldsc.py \
 
 ```bash
 python3 ldsc.py \
--M h2 \
+-mi h2 \
 -s ./results/test.txt \
 -n 61220 \
 -o ./results/test

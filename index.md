@@ -3,7 +3,7 @@
 
 Jiang Wenxin
 
-2023.02.04
+2023.04.28
 
 --------------------
 
@@ -26,12 +26,7 @@ Jiang Wenxin
 ## Motivation, Aims and Formula
 
 - **Individual-level model:** $\phi=X\beta+\epsilon$. If individual data is available, we can estimate the effect size $\beta$ directly.
-- **Summary-level data:** If only the z-score of variant $j$
-
-$$
-z_j=\left(\hat{\beta}_j-\bar{\beta}_j\right)/\text{SE}_j=\hat{\beta}_j
-$$
-is available, where $\hat{\beta}_j$ is the estimated effect size and $\text{SE}_j$ is the standard error of $\hat{\beta}_j$, then calculate the $\chi^2$ statistic of variant $j$ with $$\chi^2_j=N\hat{\beta}_j^2=Nz_j^2.$$
+- **Summary-level data:** Sometimes only the summary statistic $\{\hat{b}_j, \hat{s}_j\}$ of variant $j$ or the z-score $z_j=\hat{b}_j/\hat{s}_j$ is available, where $\hat{b}_j=x_j^T y/x^T_j x_j=x_j^T y/N$ and $\hat{s}_j=\sqrt{(y-x_j\hat{b}_j)^T(y-x_j\hat{b}_j)/(Nx_j^Tx_j)}$. Then calculate the $\chi^2$ statistic of variant $j$ with $$\chi^2_j=N\hat{\beta}_j^2=Nz_j^2.$$
 
 --------------------
 
@@ -50,32 +45,14 @@ $$
 \end{equation}
 $$
 
-<!-- $\phi$: N by 1 vector of phenotypes
-
-$X$: N by M matrix of normalized genotypes
-
-$\beta$: M by 1 vector of per-normalized-genotype effect sizes
-
-$\epsilon$: N by 1 vector of environmental effects
-
-**Expectation and Variance:** -->
-
-<!-- table -->
-
-<!-- | | $\mathbb{E}$ | $\text{Var}$ |
-| --- | --- | --- |
-| $\beta$ | 0 | $\frac{h_g^2}{M}I$ |
-| $\epsilon$ | 0 | $\left(1-h_g^2\right)I$ |
-| $\phi$ | 0 | $\frac{h_g^2}{M}XX^\text{T}+\left(1-h_g^2\right)I$ | -->
-
 **Notations:**
 
-| Variable | Size | Description | $\mathbb{E}$ | $\text{Var}$ |
-| --- | --- | --- | --- | --- |
-| $\phi$ | N*1 | Phenotype vector | $0$  | $\frac{h_g^2}{M}XX^\text{T}+\left(1-h_g^2\right)I$ |
-| $X$ | N*M | Normalized Genotype matrix | $0$ | $I$ |
-| $\beta$ | M*1 | Per-normalized Effect size vector | $0$ | $\frac{h_g^2}{M}I$ |
-| $\epsilon$ | N*1 | Environmental effect vector | $0$ | $\left(1-h_g^2\right)I$ |
+| Variable   | Size | Description                       | $\mathbb{E}$ | $\text{Var}$                                       |
+| ---------- | ---- | --------------------------------- | ------------ | -------------------------------------------------- |
+| $\phi$     | N*1  | Phenotype vector                  | $0$          | $\frac{h_g^2}{M}XX^\text{T}+\left(1-h_g^2\right)I$ |
+| $X$        | N*M  | Normalized Genotype matrix        | $0$          | $I$                                                |
+| $\beta$    | M*1  | Per-normalized Effect size vector | $0$          | $\frac{h_g^2}{M}I$                                 |
+| $\epsilon$ | N*1  | Environmental effect vector       | $0$          | $\left(1-h_g^2\right)I$                            |
 
 **Assumptions:**
 
@@ -233,7 +210,9 @@ Here we have proved Proposition 1.
 
 A criticism of LD score regression is that every analysis for each pair of traits uses the same LD scores as the dependent variable in the regression model (and as LD scores have been precomputed by its proponents, literally the same LD scores are used in the majority of applied analyses). This means that any influential points in the regression will affect not only one LD score regression analysis, but all such analyses.
 
-LD scores are also likely to be a ‘weak instrument’ in the language of Mendelian randomization, as they will only explain a small proportion of variance in the dependent variable. Additionally, due to the scale of the data, it is not possible to provide a visual representation of an LD score regression analysis. Standard regres- sion diagnostics are rarely, if ever, performed. Finally, results from LD score regression are not always consistent with known causal relationships; for example, the method did not find evidence for a genetic correlation between LDL cholesterol and CHD risk that survived a multipletesting correction (Bulik-Sullivan et al., 2015).
+LD scores are also likely to be a ‘weak instrument’ in the language of Mendelian randomization, as they will only explain a small proportion of variance in the dependent variable. Additionally, due to the scale of the data, it is not possible to provide a visual representation of an LD score regression analysis. Standard regres- sion diagnostics are rarely, if ever, performed.
+
+Finally, results from LD score regression are not always consistent with known causal relationships; for example, the method did not find evidence for a genetic correlation between LDL cholesterol and CHD risk that survived a multipletesting correction (Bulik-Sullivan et al., 2015).
 
 --------------------
 
@@ -249,7 +228,7 @@ The method has utility in mapping the genetic distance between related phenotype
 
 First, no constraint is applied to heritability estimates, therefore it is possible to get non-interpretable estimates that are below 0 or above 1.
 
-Second, variance of estimators is cal- culated using a resampling method, the blockwise jackknife. For moderate GWAS sample size, this approach often leads to very wide confidence intervals for enrichment, thereby reducing statistical power.
+Second, variance of estimators is calculated using a resampling method, the blockwise jackknife. For moderate GWAS sample size, this approach often leads to very wide confidence intervals for enrichment, thereby reducing statistical power.
 
 Finally, z-scores for SNPs in LD may be strongly correlated. LD score regression reduces the impact of dependence among data points by using specially designed weights in weighted least squares estimation and only including HapMap SNPs in the model. Still, it remains unclear if such empirical approaches are sufficient to remove bias.
 
